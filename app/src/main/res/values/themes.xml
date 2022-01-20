@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.UpNextWidget.App" parent="Theme.AppCompat.DayNight">
+        <item name="android:textColor">@color/font_one</item>
+        <item name="android:textColorPrimary">@color/font_one</item>
+        <item name="android:textColorSecondary">@color/font_two</item>
+        <item name="android:textColorTertiary">@color/font_three</item>
+    </style>
+
+    <style name="Theme.UpNextWidget.Widget" parent="Theme.UpNextWidget.App" />
+</resources>
