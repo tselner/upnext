@@ -1,11 +1,13 @@
 package io.those.upnext.remoteviews;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static io.those.upnext.receiver.UpNextWidgetProvider.ACTION_WIDGET_REFRESH;
 import static io.those.upnext.service.EventsService.EXTRA_DATE_PATTERN;
 import static io.those.upnext.service.EventsService.EXTRA_END;
 import static io.those.upnext.service.EventsService.EXTRA_START;
 import static io.those.upnext.service.EventsService.EXTRA_WITH_DAY_LABELS;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +15,11 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 import io.those.upnext.R;
+import io.those.upnext.receiver.UpNextWidgetProvider;
 import io.those.upnext.service.EventsService;
 import io.those.upnext.util.PermissionUtil;
 
@@ -23,8 +27,15 @@ public class WidgetViewCreator {
     public static RemoteViews createWidgetView(Context context, int appWidgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upnext);
 
+        // Refresh Button
+        Intent updateIntent = new Intent(context, UpNextWidgetProvider.class);
+        updateIntent.setAction(ACTION_WIDGET_REFRESH);
+        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context, 0, updateIntent, 0);
+        views.setOnClickPendingIntent(R.id.btn_refresh, pendingUpdateIntent);
+
         LocalDate today = LocalDate.now();
-        // LocalDate today = LocalDate.of(2021, Month.NOVEMBER, 8);
+        // LocalDate today = LocalDate.of(2021, Month.JULY, 22);
 
         views.setTextViewText(R.id.left_header_weekday, today.format(ofPattern("EEEE")));
         views.setTextViewText(R.id.left_header_date, today.format(ofPattern("d")));

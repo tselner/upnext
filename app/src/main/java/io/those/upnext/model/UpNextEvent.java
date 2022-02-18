@@ -9,11 +9,8 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class UpNextEvent implements Comparable<UpNextEvent> {
     private static final int ALPHA_FOR_EVENT_BACKGROUND = 0x40000000;
@@ -27,14 +24,6 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
     private final Long startInMillis;
     private final Long endInMillis;
     private final String timezone;
-
-    public boolean isOnDay(LocalDate day) {
-        return getStart().isBefore(day.atTime(LocalTime.MAX)) && getEnd().isAfter(day.atTime(LocalTime.MIN));
-    }
-
-    public boolean isInRange(LocalDate start, LocalDate end) {
-        return getStart().isBefore(end.plusDays(1).atStartOfDay()) && getEnd().isAfter(start.atStartOfDay());
-    }
 
     public LocalDate getDay() {
         return toDate(getStartInMillis(), ZoneId.of(getTimezone()));
@@ -54,14 +43,6 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
 
     public static UpNextEvent of(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone) {
         return new UpNextEvent(id, calendar, title, description, allDay, startInMillis, endInMillis, timezone);
-    }
-
-    public static List<UpNextEvent> getEventsByDay(List<UpNextEvent> events, LocalDate day) {
-        return events.stream().filter(e -> e.isOnDay(day)).collect(Collectors.toList());
-    }
-
-    public static List<UpNextEvent> getEventsByRange(List<UpNextEvent> events, LocalDate start, LocalDate end, ZoneId zoneId) {
-        return events.stream().filter(e -> e.isInRange(start, end)).collect(Collectors.toList());
     }
 
     private UpNextEvent(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone) {

@@ -100,7 +100,6 @@ public class EventsService extends RemoteViewsService {
 
         @Override
         public int getViewTypeCount() {
-            // TODO return withDayLabels ? 2 : 1;
             return 1;
         }
 

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.provider.CalendarContract;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -15,9 +16,11 @@ import java.util.TimeZone;
 
 import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.model.UpNextEvent;
+import io.those.upnext.util.TimeUtil;
 
 public class EventRepository extends Repository {
     private static final int HOUR_IN_MILLIS = 3600000;
+    private static final ZoneId UTC = ZoneId.of("UTC");
 
     public EventRepository(ContentResolver contentResolver) {
         super(contentResolver);
@@ -35,13 +38,23 @@ public class EventRepository extends Repository {
 
     private static final String EVENT_SELECTION =
             "(" +
-                "(" + CalendarContract.Events.CALENDAR_ID + " = ?)" +
+                     "(" + CalendarContract.Events.CALENDAR_ID + " = ?)" +
+                " AND (" + CalendarContract.Events.DTSTART     + " < ?)" + // must be less than END of range
+                " AND (" + CalendarContract.Events.DTEND       + " > ?)" + // must be greater than START of range
             ")";
 
-    public List<UpNextEvent> getEvents(UpNextCalendar calendar) {
+    public List<UpNextEvent> getEvents(UpNextCalendar calendar, LocalDate start, LocalDate end) {
         List<UpNextEvent> events = new ArrayList<>();
 
-        Cursor cur = getContentResolver().query(CalendarContract.Events.CONTENT_URI, REQUESTED_EVENT_FIELDS, EVENT_SELECTION, new String[]{calendar.getId().toString()}, null);
+        Cursor cur = getContentResolver().query(
+                CalendarContract.Events.CONTENT_URI, REQUESTED_EVENT_FIELDS,
+                EVENT_SELECTION,
+                new String[]{
+                        calendar.getId().toString(),
+                        String.valueOf((TimeUtil.toMillis(end.atTime(LocalTime.MAX), UTC))), // start <= END of range
+                        String.valueOf(TimeUtil.toMillis(start.atTime(LocalTime.MIN), UTC))            // end >= START of range
+                },
+                null);
 
         while (cur.moveToNext()) {
             events.add(UpNextEvent.of(
@@ -63,10 +76,8 @@ public class EventRepository extends Repository {
     }
 
     public List<UpNextEvent> getEventsByDateRange(List<UpNextCalendar> cals, LocalDate start, LocalDate end, ZoneId zoneId) {
-        List<UpNextEvent> allEvents = new ArrayList<>();
-        cals.forEach(cal -> allEvents.addAll(getEvents(cal)));
-
-        List<UpNextEvent> rangeEvents = UpNextEvent.getEventsByRange(allEvents, start, end, zoneId);
+        List<UpNextEvent> rangeEvents = new ArrayList<>();
+        cals.forEach(cal -> rangeEvents.addAll(getEvents(cal,start, end)));
         Collections.sort(rangeEvents);
         return rangeEvents;
     }
