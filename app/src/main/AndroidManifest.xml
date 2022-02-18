@@ -24,7 +24,7 @@
 
         <receiver
             android:name=".receiver.UpNextWidgetProvider"
-            android:label="Up Next"
+            android:label="up next"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

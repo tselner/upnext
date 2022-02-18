@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Up Next</string>
+    <string name="app_name">up next</string>
     <string name="description">here should be a description</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
