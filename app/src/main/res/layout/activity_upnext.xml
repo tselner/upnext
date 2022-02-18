@@ -6,42 +6,4 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activity.UpNextActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/header_available_calendards"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="Available calendars"
-            android:textSize="18sp"
-            android:textColor="@color/font_one" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="Refresh"
-            android:onClick="onClickRefresh" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/text_no_calendars"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No calendars available at the moment."
-        android:textSize="14sp"
-        android:textColor="@color/font_two"/>
-
-    <ListView
-        android:id="@+id/list_available_calendars"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        android:dividerHeight="8dp" />
 </LinearLayout>

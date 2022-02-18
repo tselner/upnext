@@ -23,53 +23,5 @@ public class UpNextActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        refresh();
-    }
-
-    public void onClickRefresh(View view) {
-        refresh();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (PermissionUtil.isReadCalendarGranted(requestCode, grantResults)) {
-            Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "This app requires permission to read your calendar!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void refresh() {
-        checkPermission();
-
-        setContentView(R.layout.activity_upnext);
-
-        if (PermissionUtil.checkReadCalendarPermission(this)) {
-            CalendarRepository calRep = new CalendarRepository(getContentResolver());
-            List<UpNextCalendar> cals = calRep.getCalendars();
-
-            if (cals.isEmpty()) {
-                findViewById(R.id.list_available_calendars).setVisibility(View.GONE);
-            } else {
-                findViewById(R.id.text_no_calendars).setVisibility(View.GONE);
-
-                // ListView
-                ListView listViewAvailableCalendars = findViewById(R.id.list_available_calendars);
-                listViewAvailableCalendars.setAdapter(new CalendarListViewAdapter(this, cals));
-            }
-        }
-        else {
-            findViewById(R.id.list_available_calendars).setVisibility(View.GONE);
-        }
-
-        Toast.makeText(this, "Refreshed!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void checkPermission() {
-        if (!PermissionUtil.checkReadCalendarPermission(this)) {
-            requestPermissions(new String[] {READ_CALENDAR}, PermissionUtil.READ_CALENDAR_CODE);
-        }
     }
 }

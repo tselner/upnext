@@ -2,11 +2,12 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/description"
     android:initialLayout="@layout/widget_upnext"
-    android:minWidth="250dp"
+    android:minWidth="140dp"
     android:minHeight="110dp"
-    android:minResizeWidth="250dp"
+    android:minResizeWidth="140dp"
     android:minResizeHeight="110dp"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"
-    android:widgetCategory="home_screen">
+    android:widgetCategory="home_screen"
+    android:configure="io.those.upnext.activity.UpNextWidgetConfigurationActivity">
 </appwidget-provider>
