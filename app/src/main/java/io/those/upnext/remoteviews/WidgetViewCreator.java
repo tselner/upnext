@@ -1,7 +1,6 @@
 package io.those.upnext.remoteviews;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
-
 import static io.those.upnext.service.EventsService.EXTRA_DATE_PATTERN;
 import static io.those.upnext.service.EventsService.EXTRA_END;
 import static io.those.upnext.service.EventsService.EXTRA_START;
@@ -25,9 +24,8 @@ public class WidgetViewCreator {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upnext);
 
         LocalDate today = LocalDate.now();
-        // LocalDate today = LocalDate.of(2021, Month.APRIL, 14);
+        // LocalDate today = LocalDate.of(2021, Month.NOVEMBER, 8);
 
-        views.setTextViewText(R.id.left_header_month, today.format(ofPattern("LLLL")));
         views.setTextViewText(R.id.left_header_weekday, today.format(ofPattern("EEEE")));
         views.setTextViewText(R.id.left_header_date, today.format(ofPattern("d")));
 

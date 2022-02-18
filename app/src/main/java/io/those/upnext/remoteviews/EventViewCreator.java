@@ -37,6 +37,7 @@ public class EventViewCreator {
             eventView.setViewVisibility(R.id.event_duration, GONE);
         } else {
             eventView.setTextViewText(R.id.event_duration, event.getDuration());
+            // eventView.setTextColor(R.id.event_duration, event.getColor());
         }
 
         return eventView;

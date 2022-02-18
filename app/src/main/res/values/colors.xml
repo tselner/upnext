@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#FFFFFFFF</color>
-    <color name="background_inner">#FFCA0101</color>
-    <color name="font_one">#FF000000</color>
-    <color name="font_two">#FF6C757D</color>
-    <color name="font_three">#FFCA0101</color>
+    <color name="black_dark" >#222831</color>
+    <!--
+    <color name="black_light">#393E46</color>
+      -->
+    <color name="teal"       >#00ADB5</color>
+    <color name="grey_darker">#98A1B0</color>
+    <color name="grey_dark"  >#A8B3BC</color>
+    <color name="grey_light" >#EEEEEE</color>
+
+    <color name="background">@color/grey_light</color>
+
+    <color name="font_one"  >@color/black_dark</color>
+    <color name="font_two"  >@color/grey_darker</color>
+    <color name="font_three">@color/teal</color>
 </resources>

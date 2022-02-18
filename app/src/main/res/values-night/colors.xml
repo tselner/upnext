@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#FF000000</color>
-    <color name="background_inner">#FFE30613</color>
-    <color name="font_one">#FFFFFFFF</color>
-    <color name="font_two">#FFADB5BD</color>
-    <color name="font_three">#FFE30613</color>
+    <color name="background" >@color/black_dark</color>
+
+    <color name="font_one" >@color/grey_light</color>
+    <color name="font_two"  >@color/grey_dark</color>
+    <color name="font_three">@color/teal</color>
 </resources>

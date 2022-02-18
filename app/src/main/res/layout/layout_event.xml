@@ -3,17 +3,16 @@
     android:id="@+id/event_layout"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:paddingHorizontal="4dp">
+    android:orientation="vertical">
 
         <TextView
             android:id="@+id/day_label"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="4dp"
-            android:textColor="@color/font_two"
+            android:textColor="@color/font_three"
             android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,15 +37,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/font_one"
-                            android:textSize="14sp"/>
+                            android:textStyle="bold"
+                            android:textSize="12sp"/>
 
                         <!-- duration -->
                         <TextView
                             android:id="@+id/event_duration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="@color/font_two" />
+                            android:textColor="@color/font_two"
+                            android:textStyle="bold"
+                            android:textSize="12sp" />
                 </LinearLayout>
         </LinearLayout>
 </LinearLayout>
