@@ -15,8 +15,8 @@
 
         <TextView
             android:id="@+id/app_name"
-            android:text="up next"
-            android:textColor="@color/font_one"
+            android:text="UP NEXT"
+            android:textColor="@color/background"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_alignParentLeft="true"
@@ -61,7 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="[weekday]"
-                    android:textColor="@color/font_three"
+                    android:textColor="@color/font_two"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -70,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="[date]"
-                    android:textColor="@color/font_one"
+                    android:textColor="@color/font_three"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 

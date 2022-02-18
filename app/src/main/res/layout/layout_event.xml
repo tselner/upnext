@@ -10,7 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="4dp"
-            android:textColor="@color/font_three"
+            android:textColor="@color/font_two"
             android:textStyle="bold"
             android:textSize="12sp" />
 
@@ -45,7 +45,7 @@
                             android:id="@+id/event_duration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/font_two"
+                            android:textColor="@color/font_three"
                             android:textStyle="bold"
                             android:textSize="12sp" />
                 </LinearLayout>

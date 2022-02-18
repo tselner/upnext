@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black_dark" >#222831</color>
-    <!--
-    <color name="black_light">#393E46</color>
-      -->
-    <color name="teal"       >#00ADB5</color>
-    <color name="grey_darker">#98A1B0</color>
-    <color name="grey_dark"  >#A8B3BC</color>
-    <color name="grey_light" >#EEEEEE</color>
+    <color name="background">#EBEBEB</color>
 
-    <color name="background">@color/grey_light</color>
-
-    <color name="font_one"  >@color/black_dark</color>
-    <color name="font_two"  >@color/grey_darker</color>
-    <color name="font_three">@color/teal</color>
+    <color name="font_one"  >#0F3961</color>
+    <color name="font_two"  >#FE7326</color>
+    <color name="font_three">#1466B0</color>
 </resources>
