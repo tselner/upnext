@@ -14,16 +14,17 @@
             android:textStyle="bold"
             android:textSize="12sp" />
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-                <TextView
+
+                <ImageView
                     android:id="@+id/event_color"
-                    android:layout_width="3dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="4dp"
-                    android:shadowRadius="6" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/background_color" />
 
                 <LinearLayout
                     android:id="@+id/event_text"
@@ -37,7 +38,7 @@
                             android:id="@+id/event_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/font_event"
+                            android:textColor="@color/font_event_light"
                             android:textFontWeight="600"
                             android:textSize="12sp"/>
 
@@ -46,8 +47,8 @@
                             android:id="@+id/event_duration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/font_duration"
+                            android:textColor="@color/font_event_light"
                             android:textSize="10sp" />
                 </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
 </LinearLayout>

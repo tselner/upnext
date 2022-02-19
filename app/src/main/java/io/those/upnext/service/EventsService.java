@@ -84,7 +84,7 @@ public class EventsService extends RemoteViewsService {
                 LocalDate currDay = currEvent.getDay();
 
                 return EventViewCreator.createEventView(
-                        context.getPackageName(),
+                        context,
                         currEvent,
                         withDayLabels && (lastDay == null || currDay.isAfter(lastDay))
                 );

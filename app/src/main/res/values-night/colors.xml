@@ -3,10 +3,11 @@
 
     <color name="background"        >#151A23</color>
     <color name="font_event"        >#EFEFEF</color>
+    <color name="font_event_dark"   >#151A23</color>
+    <color name="font_event_light"  >#EFEFEF</color>
     <color name="font_date"         >#19A7D2</color>
-    <color name="font_duration"     >#ADB5BD</color>
     <color name="font_accent"       >#D24419</color>
 
-    <color name="background_header" >#6C757D</color>
+    <color name="background_header" >#19A7D2</color>
     <color name="font_header"       >#EFEFEF</color>
 </resources>

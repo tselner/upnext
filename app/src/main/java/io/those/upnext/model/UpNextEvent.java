@@ -97,6 +97,10 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
         return getCalendar().getColor();
     }
 
+    public int getAlpha() {
+        return ALPHA_FOR_EVENT_BACKGROUND;
+    }
+
     public int getAlphaColor() {
         return (getColor() & 0x00FFFFFF) | ALPHA_FOR_EVENT_BACKGROUND;
     }
