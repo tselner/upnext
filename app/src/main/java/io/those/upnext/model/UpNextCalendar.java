@@ -24,6 +24,16 @@ public class UpNextCalendar implements Comparable<UpNextCalendar> {
     }
 
     @Override
+    public boolean equals(Object otherCalendarObject) {
+        if (otherCalendarObject instanceof UpNextCalendar) {
+            UpNextCalendar otherCalendar = (UpNextCalendar) otherCalendarObject;
+            return compareTo(otherCalendar) == 0;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public int compareTo(UpNextCalendar c) {
         return new CompareToBuilder()
                 .append(this.getAccountName(), c.getAccountName())

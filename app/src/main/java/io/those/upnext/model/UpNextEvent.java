@@ -1,6 +1,5 @@
 package io.those.upnext.model;
 
-import static io.those.upnext.util.TimeUtil.toDate;
 import static io.those.upnext.util.TimeUtil.toDateTime;
 
 import androidx.annotation.NonNull;
@@ -24,10 +23,7 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
     private final Long startInMillis;
     private final Long endInMillis;
     private final String timezone;
-
-    public LocalDate getDay() {
-        return toDate(getStartInMillis(), ZoneId.of(getTimezone()));
-    }
+    private final LocalDate day; // the day, for which the event has been read and will be displayed
 
     public LocalDateTime getStart() {
         return millisToLocalDateTime(getStartInMillis());
@@ -41,11 +37,11 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
         return millis != null ? toDateTime(millis, getTimezone() != null ? ZoneId.of(getTimezone()) : ZoneId.systemDefault()) : null;
     }
 
-    public static UpNextEvent of(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone) {
-        return new UpNextEvent(id, calendar, title, description, allDay, startInMillis, endInMillis, timezone);
+    public static UpNextEvent of(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone, LocalDate day) {
+        return new UpNextEvent(id, calendar, title, description, allDay, startInMillis, endInMillis, timezone, day);
     }
 
-    private UpNextEvent(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone) {
+    private UpNextEvent(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone, LocalDate day) {
         this.id = id;
         this.calendar = calendar;
         this.title = title;
@@ -54,6 +50,17 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
         this.startInMillis = startInMillis;
         this.endInMillis = endInMillis;
         this.timezone = timezone;
+        this.day = day;
+    }
+
+    @Override
+    public boolean equals(Object otherEventObject) {
+        if (otherEventObject instanceof UpNextEvent) {
+            UpNextEvent otherEvent = (UpNextEvent) otherEventObject;
+            return (getId().equals(otherEvent.getId()) && getCalendar().equals(otherEvent.getCalendar()));
+        } else {
+            return false;
+        }
     }
 
     public boolean isAllDay() {
@@ -135,5 +142,9 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
 
     public String getTimezone() {
         return timezone;
+    }
+
+    public LocalDate getDay() {
+        return day;
     }
 }

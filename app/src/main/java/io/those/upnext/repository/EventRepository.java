@@ -43,7 +43,7 @@ public class EventRepository extends Repository {
                 " AND (" + CalendarContract.Events.DTEND       + " > ?)" + // must be greater than START of range
             ")";
 
-    public List<UpNextEvent> getEvents(UpNextCalendar calendar, LocalDate start, LocalDate end) {
+    public List<UpNextEvent> getEvents(UpNextCalendar calendar, LocalDate day) {
         List<UpNextEvent> events = new ArrayList<>();
 
         Cursor cur = getContentResolver().query(
@@ -51,8 +51,8 @@ public class EventRepository extends Repository {
                 EVENT_SELECTION,
                 new String[]{
                         calendar.getId().toString(),
-                        String.valueOf((TimeUtil.toMillis(end.atTime(LocalTime.MAX), UTC))), // start <= END of range
-                        String.valueOf(TimeUtil.toMillis(start.atTime(LocalTime.MIN), UTC))            // end >= START of range
+                        String.valueOf((TimeUtil.toMillis(day.atTime(LocalTime.MAX), UTC))), // start <= END of range
+                        String.valueOf(TimeUtil.toMillis(day.atTime(LocalTime.MIN), UTC))            // end >= START of range
                 },
                 null);
 
@@ -65,7 +65,8 @@ public class EventRepository extends Repository {
                     cur.getInt(3) == 1 ? Boolean.TRUE : Boolean.FALSE,
                     cur.getLong(4),
                     cur.getLong(5),
-                    cur.getString(6)
+                    cur.getString(6),
+                    day
             ));
         }
 
@@ -75,9 +76,9 @@ public class EventRepository extends Repository {
         return events;
     }
 
-    public List<UpNextEvent> getEventsByDateRange(List<UpNextCalendar> cals, LocalDate start, LocalDate end, ZoneId zoneId) {
+    public List<UpNextEvent> getEventsByDay(List<UpNextCalendar> cals, LocalDate day, ZoneId zoneId) {
         List<UpNextEvent> rangeEvents = new ArrayList<>();
-        cals.forEach(cal -> rangeEvents.addAll(getEvents(cal,start, end)));
+        cals.forEach(cal -> rangeEvents.addAll(getEvents(cal, day)));
         Collections.sort(rangeEvents);
         return rangeEvents;
     }
@@ -108,7 +109,7 @@ public class EventRepository extends Repository {
 
             UpNextCalendar randCal = cals.get(i % cals.size());
             String title = generateTitle(i);
-            events.add(UpNextEvent.of(String.valueOf(i), randCal, title, "This is an event.", allDay, startInMillis, endInMillis, tz.getID()));
+            events.add(UpNextEvent.of(String.valueOf(i), randCal, title, "This is an event.", allDay, startInMillis, endInMillis, tz.getID(), day));
         }
 
         Collections.sort(events);

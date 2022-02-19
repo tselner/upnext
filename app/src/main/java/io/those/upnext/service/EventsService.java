@@ -8,8 +8,11 @@ import android.widget.RemoteViewsService;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.model.UpNextEvent;
@@ -44,14 +47,32 @@ public class EventsService extends RemoteViewsService {
             this.withDayLabels = intent.getBooleanExtra(EXTRA_WITH_DAY_LABELS, false);
         }
 
+        CalendarRepository getCalendarRepositoryInstance(Context context) {
+            return new CalendarRepository(context.getContentResolver());
+        }
+
+        EventRepository getEventRepositoryInstance(Context context) {
+            return new EventRepository(context.getContentResolver());
+        }
+
         @Override
         public void onCreate() {
-            CalendarRepository calRep = new CalendarRepository(context.getContentResolver());
-            EventRepository evtRep    = new EventRepository(context.getContentResolver());
+            CalendarRepository calRep = getCalendarRepositoryInstance(context);
+            EventRepository evtRep    = getEventRepositoryInstance(context);
 
             List<UpNextCalendar> cals = calRep.getCalendars();
+
+            long numberOfDaysBetween = ChronoUnit.DAYS.between(start, end) + 1;
+            List<LocalDate> days = IntStream.iterate(0, i -> i + 1)
+                    .limit(numberOfDaysBetween)
+                    .mapToObj(start::plusDays)
+                    .collect(Collectors.toList());
+
             events.clear();
-            events.addAll(evtRep.getEventsByDateRange(cals, start, end, ZoneId.systemDefault()));
+            days.forEach(day -> {
+                List<UpNextEvent> eventsForThatDay = evtRep.getEventsByDay(cals, day, ZoneId.systemDefault());
+                events.addAll(eventsForThatDay);
+            });
         }
 
         @Override
