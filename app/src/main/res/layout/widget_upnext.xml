@@ -48,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginHorizontal="3dp">
+            android:layout_marginHorizontal="5dp">
 
             <LinearLayout
                 android:id="@+id/left_header"
@@ -83,7 +83,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginHorizontal="3dp">
+            android:layout_marginHorizontal="5dp">
 
             <ListView
                 android:id="@+id/right_events"
