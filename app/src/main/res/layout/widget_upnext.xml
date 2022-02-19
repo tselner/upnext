@@ -16,9 +16,9 @@
         <TextView
             android:id="@+id/app_name"
             android:text="UP NEXT"
-            android:textColor="@color/background"
+            android:textColor="@color/font_header"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
@@ -54,24 +54,16 @@
                 android:id="@+id/left_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/left_header_weekday"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="[weekday]"
-                    android:textColor="@color/font_two"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
 
                 <TextView
                     android:id="@+id/left_header_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="[date]"
-                    android:textColor="@color/font_three"
-                    android:textSize="24sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="[weekday]"
+                    android:textColor="@color/font_accent"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

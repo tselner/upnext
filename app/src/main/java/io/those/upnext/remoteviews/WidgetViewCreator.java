@@ -34,11 +34,10 @@ public class WidgetViewCreator {
         PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context, 0, updateIntent, 0);
         views.setOnClickPendingIntent(R.id.btn_refresh, pendingUpdateIntent);
 
-        LocalDate today = LocalDate.now();
-        // LocalDate today = LocalDate.of(2021, Month.JUNE, 14);
+        // LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2022, Month.FEBRUARY, 7);
 
-        views.setTextViewText(R.id.left_header_weekday, today.format(ofPattern("EEEE")));
-        views.setTextViewText(R.id.left_header_date, today.format(ofPattern("d")));
+        views.setTextViewText(R.id.left_header_date, today.format(ofPattern("EEEE, d. LLL")));
 
         if (PermissionUtil.checkReadCalendarPermission(context)) {
             views.setRemoteAdapter(R.id.left_events,

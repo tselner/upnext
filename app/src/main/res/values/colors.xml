@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#EBEBEB</color>
+    <!-- #F8F8F8 -->
+    <color name="background"        >#EFEFEF</color>
+    <color name="font_event"        >#151A23</color>
+    <color name="font_date"         >#19A7D2</color>
+    <color name="font_duration"     >#6C757D</color>
+    <color name="font_accent"       >#D24419</color>
 
-    <color name="font_one"  >#0F3961</color>
-    <color name="font_two"  >#FE7326</color>
-    <color name="font_three">#1466B0</color>
+    <color name="background_header" >#6C757D</color>
+    <color name="font_header"       >#EFEFEF</color>
 </resources>
