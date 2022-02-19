@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import io.those.upnext.remoteviews.WidgetViewCreator;
+import io.those.upnext.util.PermissionUtil;
 
 public class UpNextWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_WIDGET_REFRESH = "ACTION_WIDGET_REFRESH";
@@ -28,7 +29,9 @@ public class UpNextWidgetProvider extends AppWidgetProvider {
     }
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        appWidgetManager.updateAppWidget(appWidgetId, WidgetViewCreator.createWidgetView(context, appWidgetId));
-        Toast.makeText(context, String.format("Widget with ID %d has been updated!", appWidgetId), Toast.LENGTH_LONG).show();
+        if (PermissionUtil.checkReadCalendarPermission(context)) {
+            appWidgetManager.updateAppWidget(appWidgetId, WidgetViewCreator.createWidgetView(context, appWidgetId));
+            Toast.makeText(context, String.format("Widget with ID %d has been updated!", appWidgetId), Toast.LENGTH_LONG).show();
+        }
     }
 }

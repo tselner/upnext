@@ -28,7 +28,7 @@ public class EventsService extends RemoteViewsService {
         return new EventsRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 
-    class EventsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    static class EventsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         private final Context context;
         private final LocalDate start;
         private final LocalDate end;

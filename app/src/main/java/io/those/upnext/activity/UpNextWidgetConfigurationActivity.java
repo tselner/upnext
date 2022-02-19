@@ -1,14 +1,11 @@
 package io.those.upnext.activity;
 
-import static android.Manifest.permission.READ_CALENDAR;
-
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.those.upnext.remoteviews.WidgetViewCreator;
@@ -18,20 +15,15 @@ public class UpNextWidgetConfigurationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkPermission(); // Required for displaying calendar events
-    }
+        setResult(RESULT_CANCELED); // This causes the widget host to cancel the widget placement if the user presses the back button
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (PermissionUtil.isReadCalendarGranted(requestCode, grantResults)) {
+        if (PermissionUtil.checkReadCalendarPermission(this)) {
             Intent intent = getIntent();
             int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+                appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             }
 
             RemoteViews widgetView = WidgetViewCreator.createWidgetView(this, appWidgetId);
@@ -40,16 +32,9 @@ public class UpNextWidgetConfigurationActivity extends AppCompatActivity {
             Intent resultValue = new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             setResult(RESULT_OK, resultValue);
         } else {
-            Toast.makeText(this, "This app requires permission to read your calendar!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Can not create widget: permission required!", Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED);
         }
-
         finish();
-    }
-
-    private void checkPermission() {
-        if (!PermissionUtil.checkReadCalendarPermission(this)) {
-            requestPermissions(new String[] {READ_CALENDAR}, PermissionUtil.READ_CALENDAR_CODE);
-        }
     }
 }

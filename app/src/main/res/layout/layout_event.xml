@@ -22,7 +22,8 @@
                     android:id="@+id/event_color"
                     android:layout_width="3dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="4dp" />
+                    android:layout_marginEnd="4dp"
+                    android:shadowRadius="6" />
 
                 <LinearLayout
                     android:id="@+id/event_text"
