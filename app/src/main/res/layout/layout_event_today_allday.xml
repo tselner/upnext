@@ -29,9 +29,7 @@
                         <!-- title -->
                         <TextView
                             android:id="@+id/event_title"
-                            style="@style/eventTitle"
-                            android:maxLines="1"
-                            android:ellipsize="end"/>
+                            style="@style/eventTitle"/>
                 </LinearLayout>
         </FrameLayout>
 </LinearLayout>

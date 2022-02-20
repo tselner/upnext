@@ -6,40 +6,42 @@
     android:layout_width="match_parent"
     android:background="@drawable/background_widget">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_header"
-        android:paddingHorizontal="13dp"
+        android:paddingHorizontal="8dp"
         android:id="@+id/header">
 
         <TextView
-            android:id="@+id/today_date"
+            android:id="@+id/header_text"
             android:textColor="@color/font_header"
-            android:textStyle="bold"
+            android:textFontWeight="800"
             android:textSize="14sp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left" />
 
         <ImageView
             android:id="@+id/btn_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|right"
             android:padding="4dp"
             android:src="@drawable/ic_baseline_refresh_24" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:id="@+id/body"
-        android:layout_margin="8dp">
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginHorizontal="8dp">
 
         <LinearLayout
             android:id="@+id/left"
@@ -47,7 +49,36 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginHorizontal="5dp">
+            android:layout_marginRight="5dp">
+
+            <LinearLayout
+                android:id="@+id/left_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:id="@+id/left_header_weekday"
+                    android:textColor="@color/font_date"
+                    android:textFontWeight="600"
+                    android:textSize="20sp"
+                    android:gravity="center_vertical|left"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/left_header_date"
+                    android:textColor="@color/font_accent"
+                    android:textFontWeight="800"
+                    android:textSize="20sp"
+                    android:gravity="center_vertical|right"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/today_events"
@@ -64,7 +95,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginHorizontal="5dp">
+            android:layout_marginLeft="5dp">
 
             <ListView
                 android:id="@+id/upnext_events"

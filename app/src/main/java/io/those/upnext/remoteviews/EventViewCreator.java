@@ -16,7 +16,7 @@ import io.those.upnext.model.UpNextEvent;
 
 public class EventViewCreator {
     private static final String DATE_PATTERN = "EEEE, d. LLL";
-    private static final int NIGHT_MODE_ALPHA = 130;
+    private static final int ALPHA = 130;
 
     public static RemoteViews createEventView(Context context, UpNextEvent prevEvent, UpNextEvent event, boolean isTodayEvent) {
         RemoteViews eventView;
@@ -49,6 +49,9 @@ public class EventViewCreator {
 
         // Title
         eventView.setTextViewText(R.id.event_title, event.getTitle());
+        if (isNightMode(context) && event.isAllDay()) {
+            eventView.setTextColor(R.id.event_title, event.getColor());
+        }
 
         // Duration
         if (event.isAllDay()) {
@@ -68,13 +71,13 @@ public class EventViewCreator {
     }
 
     private static void setEventBackgroundColor(Context context, RemoteViews eventView, UpNextEvent event) {
-        if (event.isAllDay()) {
+        // Background & Alpha
+        if (isDayMode(context) && event.isAllDay()) {
             eventView.setInt(R.id.event_background, "setColorFilter", event.getColor());
+            eventView.setInt(R.id.event_background, "setImageAlpha", ALPHA);
         } else {
             eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
         }
-
-        eventView.setInt(R.id.event_background, "setImageAlpha", NIGHT_MODE_ALPHA);
     }
 /*
     private static int getTextColor(Context context, int elementColor) {
@@ -92,8 +95,11 @@ public class EventViewCreator {
     }
  */
 
+    private static boolean isDayMode(Context context) {
+        return !isNightMode(context);
+    }
 
-    private static boolean isNightModeActive(Context context) {
+    private static boolean isNightMode(Context context) {
         int nightModeFlags =
                 context.getResources().getConfiguration().uiMode &
                         Configuration.UI_MODE_NIGHT_MASK;
