@@ -40,7 +40,7 @@ public class EventViewCreator {
         }
 
         // Background
-        eventView.setInt(R.id.event_background, "setColorFilter", getEventBackgroundColor(context, event));
+        setEventBackgroundColor(context, eventView, event);
 
         // Color
         eventView.setInt(R.id.event_color, "setColorFilter", event.getColor());
@@ -65,11 +65,12 @@ public class EventViewCreator {
         return (lastDay == null || currDay.isAfter(lastDay));
     }
 
-    private static int getEventBackgroundColor(Context context, UpNextEvent event) {
+    private static void setEventBackgroundColor(Context context, RemoteViews eventView, UpNextEvent event) {
         if (event.isAllDay()) {
-            return event.getColor();
+            eventView.setInt(R.id.event_background, "setColorFilter", event.getColor());
+            eventView.setInt(R.id.event_background, "setImageAlpha", 130);
         } else {
-            return ContextCompat.getColor(context, R.color.background_event);
+            eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
         }
     }
 /*
