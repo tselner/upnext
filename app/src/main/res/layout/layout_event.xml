@@ -20,16 +20,18 @@
             android:orientation="horizontal"
             android:background="@drawable/background_event">
 
-                <TextView
+                <ImageView
                     android:id="@+id/event_color"
                     android:layout_width="4dp"
                     android:layout_height="match_parent"
+                    android:src="@drawable/background_color"
                     android:layout_marginRight="4dp" />
 
                 <LinearLayout
                     android:id="@+id/event_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingVertical="4dp"
                     android:orientation="vertical">
 
                         <!-- title -->

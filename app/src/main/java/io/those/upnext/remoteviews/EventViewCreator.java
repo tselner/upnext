@@ -22,7 +22,7 @@ public class EventViewCreator {
         }
 
         // Color
-        eventView.setInt(R.id.event_color, "setBackgroundColor", event.getColor());
+        eventView.setInt(R.id.event_color, "setColorFilter", event.getColor());
 
         // Title
         eventView.setTextViewText(R.id.event_title, event.getTitle());
