@@ -8,18 +8,32 @@ import android.widget.RemoteViews;
 
 import androidx.core.content.ContextCompat;
 
+import java.time.LocalDate;
+
 import io.those.upnext.R;
 import io.those.upnext.model.UpNextEvent;
 
 public class EventViewCreator {
     private static final String DATE_PATTERN = "EEEE, d. LLL";
 
-    public static RemoteViews createEventView(Context context, UpNextEvent event, boolean addDayLabel, boolean withDetails) {
-        RemoteViews eventView = withDetails ?
-                new RemoteViews(context.getPackageName(), R.layout.layout_event_detail) :
-                (event.isAllDay() ? new RemoteViews(context.getPackageName(), R.layout.layout_event_allday) : new RemoteViews(context.getPackageName(), R.layout.layout_event));
+    public static RemoteViews createEventView(Context context, UpNextEvent prevEvent, UpNextEvent event, boolean isTodayEvent) {
+        RemoteViews eventView;
 
-        if (addDayLabel) {
+        if (isTodayEvent) {
+            if (event.isAllDay()) {
+                eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_today_allday);
+            } else {
+                eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_today_subday);
+            }
+        } else {
+            if (event.isAllDay()) {
+                eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_upnext_allday);
+            } else {
+                eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_upnext_subday);
+            }
+        }
+
+        if (!isTodayEvent && addEventDay(prevEvent, event)) {
             eventView.setTextViewText(R.id.event_day, event.getDay().format(ofPattern(DATE_PATTERN)));
         } else {
             eventView.setViewVisibility(R.id.event_day, GONE);
@@ -38,10 +52,17 @@ public class EventViewCreator {
         if (event.isAllDay()) {
             eventView.setViewVisibility(R.id.event_duration, GONE);
         } else {
-            eventView.setTextViewText(R.id.event_duration, withDetails ? event.getDuration() : event.getStartAsString());
+            eventView.setTextViewText(R.id.event_duration, isTodayEvent ? event.getDuration() : event.getStartAsString());
         }
 
         return eventView;
+    }
+
+    private static boolean addEventDay(UpNextEvent prevEvent, UpNextEvent event) {
+        LocalDate lastDay = prevEvent != null ? prevEvent.getDay() : null;
+        LocalDate currDay = event.getDay();
+
+        return (lastDay == null || currDay.isAfter(lastDay));
     }
 
     private static int getEventBackgroundColor(Context context, UpNextEvent event) {

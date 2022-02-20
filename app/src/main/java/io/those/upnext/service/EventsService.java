@@ -23,8 +23,7 @@ import io.those.upnext.repository.EventRepository;
 public class EventsService extends RemoteViewsService {
     public static final String EXTRA_START = "start";
     public static final String EXTRA_END = "end";
-    public static final String EXTRA_WITH_DAY_LABELS = "withDayLabels";
-    public static final String EXTRA_WITH_DETAILS = "withDetails";
+    public static final String EXTRA_IS_TODAY_EVENT = "isTodayEvent";
     public static final String EXTRA_DATE_PATTERN = "yyy-MM-dd";
 
     @Override
@@ -36,8 +35,7 @@ public class EventsService extends RemoteViewsService {
         private final Context context;
         private final LocalDate start;
         private final LocalDate end;
-        private final boolean withDayLabels;
-        private final boolean withDetails;
+        private final boolean isTodayEvent;
         private final List<UpNextEvent> events = new ArrayList<>();
 
         public EventsRemoteViewsFactory(Context context, Intent intent) {
@@ -46,8 +44,7 @@ public class EventsService extends RemoteViewsService {
             this.start = LocalDate.parse(intent.getStringExtra(EXTRA_START), DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
             this.end   = LocalDate.parse(intent.getStringExtra(EXTRA_END)  , DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
 
-            this.withDayLabels = intent.getBooleanExtra(EXTRA_WITH_DAY_LABELS, false);
-            this.withDetails   = intent.getBooleanExtra(EXTRA_WITH_DETAILS, true);
+            this.isTodayEvent = intent.getBooleanExtra(EXTRA_IS_TODAY_EVENT, true);
         }
 
         CalendarRepository getCalendarRepositoryInstance(Context context) {
@@ -101,21 +98,11 @@ public class EventsService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
             if (position < events.size()) {
-                UpNextEvent lastEvent = position > 0 ? events.get(position - 1) : null;
-                UpNextEvent currEvent = events.get(position);
-
-                LocalDate lastDay = lastEvent != null ? lastEvent.getDay() : null;
-                LocalDate currDay = currEvent.getDay();
-
-                return EventViewCreator.createEventView(
-                        context,
-                        currEvent,
-                        withDayLabels && (lastDay == null || currDay.isAfter(lastDay)),
-                        withDetails
-                );
+                return EventViewCreator.createEventView(context, position > 0 ? events.get(position - 1) : null, events.get(position), isTodayEvent);
             } else {
                 return null;
             }
+
         }
 
         @Override

@@ -50,7 +50,7 @@
             android:layout_marginHorizontal="5dp">
 
             <ListView
-                android:id="@+id/left_events"
+                android:id="@+id/today_events"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@null"
@@ -67,7 +67,7 @@
             android:layout_marginHorizontal="5dp">
 
             <ListView
-                android:id="@+id/right_events"
+                android:id="@+id/upnext_events"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:divider="@null"
