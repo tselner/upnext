@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@android:id/background"
-    style="@style/Widget.UpNextWidget.UpNextWidget.Container"
-    android:theme="@style/Theme.UpNextWidget.Widget"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@drawable/background_widget">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_header"
-        android:paddingHorizontal="11dp"
+        android:paddingHorizontal="13dp"
         android:id="@+id/header">
 
         <TextView
-            android:id="@+id/app_name"
-            android:text="UP NEXT"
+            android:id="@+id/today_date"
             android:textColor="@color/font_header"
             android:textStyle="bold"
             android:textSize="14sp"
@@ -50,24 +49,6 @@
             android:orientation="vertical"
             android:layout_marginHorizontal="5dp">
 
-            <LinearLayout
-                android:id="@+id/left_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
-
-                <TextView
-                    android:id="@+id/left_header_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="[weekday]"
-                    android:textColor="@color/font_accent"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
             <ListView
                 android:id="@+id/left_events"
                 android:layout_width="match_parent"
@@ -89,9 +70,9 @@
                 android:id="@+id/right_events"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:orientation="vertical"
                 android:divider="@null"
-                android:dividerHeight="4dp" />
+                android:dividerHeight="4dp"
+                android:orientation="vertical" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

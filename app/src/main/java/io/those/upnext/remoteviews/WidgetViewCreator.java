@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 import io.those.upnext.R;
@@ -33,10 +34,10 @@ public class WidgetViewCreator {
         PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context, 0, updateIntent, 0);
         views.setOnClickPendingIntent(R.id.btn_refresh, pendingUpdateIntent);
 
-        LocalDate today = LocalDate.now();
-        // LocalDate today = LocalDate.of(2021, Month.SEPTEMBER, 20);
+        // LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2021, Month.NOVEMBER, 8);
 
-        views.setTextViewText(R.id.left_header_date, today.format(ofPattern("EEEE, d. LLL")));
+        views.setTextViewText(R.id.today_date, today.format(ofPattern("EEEE, d. LLL")));
 
         if (PermissionUtil.checkReadCalendarPermission(context)) {
             views.setRemoteAdapter(R.id.left_events,

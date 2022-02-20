@@ -6,9 +6,6 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 import android.content.Context;
 import android.widget.RemoteViews;
 
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.ColorUtils;
-
 import io.those.upnext.R;
 import io.those.upnext.model.UpNextEvent;
 
@@ -16,11 +13,7 @@ public class EventViewCreator {
     private static final String DATE_PATTERN = "EEEE, d. LLL";
 
     public static RemoteViews createEventView(Context context, UpNextEvent event, boolean addDayLabel) {
-        RemoteViews eventView = event.isAllDay() ?
-                new RemoteViews(context.getPackageName(), R.layout.layout_event_allday) :
-                new RemoteViews(context.getPackageName(), R.layout.layout_event);
-
-        int chosenFontColor = getTextColor(context, event);
+        RemoteViews eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event);
 
         if (addDayLabel) {
             eventView.setTextViewText(R.id.day_label, event.getDay().format(ofPattern(DATE_PATTERN)));
@@ -29,21 +22,21 @@ public class EventViewCreator {
         }
 
         // Color
-        eventView.setInt(R.id.event_color, "setColorFilter", event.getColor());
+        eventView.setInt(R.id.event_color, "setBackgroundColor", event.getColor());
 
         // Title
         eventView.setTextViewText(R.id.event_title, event.getTitle());
-        eventView.setTextColor   (R.id.event_title, chosenFontColor);
 
         // Duration
         if (!event.isAllDay()) {
             eventView.setTextViewText(R.id.event_duration, event.getDuration());
-            eventView.setTextColor   (R.id.event_duration, chosenFontColor);
+        } else {
+            eventView.setViewVisibility(R.id.event_duration, GONE);
         }
 
         return eventView;
     }
-
+/*
     private static int getTextColor(Context context, UpNextEvent event) {
         // Text color
         int colorFont      = ContextCompat.getColor(context, R.color.font_event);
@@ -62,4 +55,5 @@ public class EventViewCreator {
 
         return chosenFontColor;
     }
+ */
 }

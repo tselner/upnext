@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Theme.UpNextWidget.App" parent="Theme.AppCompat.DayNight" />
-    <style name="Theme.UpNextWidget.Widget" parent="Theme.UpNextWidget.App" />
-</resources>
