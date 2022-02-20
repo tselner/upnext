@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.widget.RemoteViews;
 
 import androidx.core.content.ContextCompat;
@@ -68,10 +69,31 @@ public class EventViewCreator {
     private static void setEventBackgroundColor(Context context, RemoteViews eventView, UpNextEvent event) {
         if (event.isAllDay()) {
             eventView.setInt(R.id.event_background, "setColorFilter", event.getColor());
-            eventView.setInt(R.id.event_background, "setImageAlpha", 130);
         } else {
             eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
         }
+
+        if (!isNightModeActive(context)) {
+            eventView.setInt(R.id.event_background, "setImageAlpha", 130);
+        }
+    }
+
+    private static boolean isNightModeActive(Context context) {
+        int nightModeFlags =
+                context.getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                return true;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+                return false;
+
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                return false;
+        }
+
+        return false;
     }
 /*
     private static int getTextColor(Context context, UpNextEvent event) {

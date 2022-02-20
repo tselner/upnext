@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_widget">#CC000000</color>
+    <color name="background_header">#274C77</color>
+    <color name="background_event" >#E7ECEF</color>
+
+    <color name="font_header"      >#E7ECEF</color>
+    <color name="font_date"        >#6096BA</color>
+    <color name="font_event"       >#000000</color>
+    <color name="font_accent"      >#EE3625 </color>
+</resources>
