@@ -47,9 +47,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/font_event"
-                            android:textSize="11sp"
-                            android:maxLines="1"
-                            android:ellipsize="end"/>
+                            android:textFontWeight="600"
+                            android:textSize="11sp"/>
+
+                        <!-- duration -->
+                        <TextView
+                            android:id="@+id/event_duration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_event"
+                            android:textSize="9sp" />
                 </LinearLayout>
         </FrameLayout>
 </LinearLayout>

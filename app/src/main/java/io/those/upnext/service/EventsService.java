@@ -24,6 +24,7 @@ public class EventsService extends RemoteViewsService {
     public static final String EXTRA_START = "start";
     public static final String EXTRA_END = "end";
     public static final String EXTRA_WITH_DAY_LABELS = "withDayLabels";
+    public static final String EXTRA_WITH_DETAILS = "withDetails";
     public static final String EXTRA_DATE_PATTERN = "yyy-MM-dd";
 
     @Override
@@ -36,6 +37,7 @@ public class EventsService extends RemoteViewsService {
         private final LocalDate start;
         private final LocalDate end;
         private final boolean withDayLabels;
+        private final boolean withDetails;
         private final List<UpNextEvent> events = new ArrayList<>();
 
         public EventsRemoteViewsFactory(Context context, Intent intent) {
@@ -45,6 +47,7 @@ public class EventsService extends RemoteViewsService {
             this.end   = LocalDate.parse(intent.getStringExtra(EXTRA_END)  , DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
 
             this.withDayLabels = intent.getBooleanExtra(EXTRA_WITH_DAY_LABELS, false);
+            this.withDetails   = intent.getBooleanExtra(EXTRA_WITH_DETAILS, true);
         }
 
         CalendarRepository getCalendarRepositoryInstance(Context context) {
@@ -107,7 +110,8 @@ public class EventsService extends RemoteViewsService {
                 return EventViewCreator.createEventView(
                         context,
                         currEvent,
-                        withDayLabels && (lastDay == null || currDay.isAfter(lastDay))
+                        withDayLabels && (lastDay == null || currDay.isAfter(lastDay)),
+                        withDetails
                 );
             } else {
                 return null;

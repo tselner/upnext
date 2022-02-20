@@ -14,8 +14,10 @@ import io.those.upnext.model.UpNextEvent;
 public class EventViewCreator {
     private static final String DATE_PATTERN = "EEEE, d. LLL";
 
-    public static RemoteViews createEventView(Context context, UpNextEvent event, boolean addDayLabel) {
-        RemoteViews eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event);
+    public static RemoteViews createEventView(Context context, UpNextEvent event, boolean addDayLabel, boolean withDetails) {
+        RemoteViews eventView = withDetails ?
+                new RemoteViews(context.getPackageName(), R.layout.layout_event_detail) :
+                new RemoteViews(context.getPackageName(), R.layout.layout_event);
 
         if (addDayLabel) {
             eventView.setTextViewText(R.id.day_label, event.getDay().format(ofPattern(DATE_PATTERN)));
@@ -33,10 +35,12 @@ public class EventViewCreator {
         eventView.setTextViewText(R.id.event_title, event.getTitle());
 
         // Duration
-        if (!event.isAllDay()) {
-            eventView.setTextViewText(R.id.event_duration, event.getDuration());
-        } else {
-            eventView.setViewVisibility(R.id.event_duration, GONE);
+        if (withDetails) {
+            if (!event.isAllDay()) {
+                eventView.setTextViewText(R.id.event_duration, event.getDuration());
+            } else {
+                eventView.setViewVisibility(R.id.event_duration, GONE);
+            }
         }
 
         return eventView;
