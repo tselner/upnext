@@ -79,6 +79,14 @@ public class UpNextEvent implements Comparable<UpNextEvent> {
         return toString;
     }
 
+    public String getStartAsString() {
+        if (getStart() != null) {
+            return getStart().format(formatter_time);
+        } else {
+            return "";
+        }
+    }
+
     public String getDuration() {
         if (getStart() != null && getEnd() != null) {
             String start = getStart().format(formatter_time);

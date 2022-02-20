@@ -48,7 +48,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/font_event"
                             android:textFontWeight="600"
-                            android:textSize="11sp"/>
+                            android:textSize="12sp"/>
 
                         <!-- duration -->
                         <TextView

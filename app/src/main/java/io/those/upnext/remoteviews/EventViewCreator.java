@@ -17,7 +17,7 @@ public class EventViewCreator {
     public static RemoteViews createEventView(Context context, UpNextEvent event, boolean addDayLabel, boolean withDetails) {
         RemoteViews eventView = withDetails ?
                 new RemoteViews(context.getPackageName(), R.layout.layout_event_detail) :
-                new RemoteViews(context.getPackageName(), R.layout.layout_event);
+                (event.isAllDay() ? new RemoteViews(context.getPackageName(), R.layout.layout_event_allday) : new RemoteViews(context.getPackageName(), R.layout.layout_event));
 
         if (addDayLabel) {
             eventView.setTextViewText(R.id.day_label, event.getDay().format(ofPattern(DATE_PATTERN)));
@@ -41,6 +41,11 @@ public class EventViewCreator {
             } else {
                 eventView.setViewVisibility(R.id.event_duration, GONE);
             }
+        }
+
+        // Begin
+        if (!withDetails && !event.isAllDay()) {
+            eventView.setTextViewText(R.id.event_begin, event.getStartAsString());
         }
 
         return eventView;
