@@ -20,9 +20,9 @@ public class EventViewCreator {
                 (event.isAllDay() ? new RemoteViews(context.getPackageName(), R.layout.layout_event_allday) : new RemoteViews(context.getPackageName(), R.layout.layout_event));
 
         if (addDayLabel) {
-            eventView.setTextViewText(R.id.day_label, event.getDay().format(ofPattern(DATE_PATTERN)));
+            eventView.setTextViewText(R.id.event_day, event.getDay().format(ofPattern(DATE_PATTERN)));
         } else {
-            eventView.setViewVisibility(R.id.day_label, GONE);
+            eventView.setViewVisibility(R.id.event_day, GONE);
         }
 
         // Background
@@ -35,17 +35,10 @@ public class EventViewCreator {
         eventView.setTextViewText(R.id.event_title, event.getTitle());
 
         // Duration
-        if (withDetails) {
-            if (!event.isAllDay()) {
-                eventView.setTextViewText(R.id.event_duration, event.getDuration());
-            } else {
-                eventView.setViewVisibility(R.id.event_duration, GONE);
-            }
-        }
-
-        // Begin
-        if (!withDetails && !event.isAllDay()) {
-            eventView.setTextViewText(R.id.event_begin, event.getStartAsString());
+        if (event.isAllDay()) {
+            eventView.setViewVisibility(R.id.event_duration, GONE);
+        } else {
+            eventView.setTextViewText(R.id.event_duration, withDetails ? event.getDuration() : event.getStartAsString());
         }
 
         return eventView;
