@@ -6,6 +6,8 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 import android.content.Context;
 import android.widget.RemoteViews;
 
+import androidx.core.content.ContextCompat;
+
 import io.those.upnext.R;
 import io.those.upnext.model.UpNextEvent;
 
@@ -21,6 +23,9 @@ public class EventViewCreator {
             eventView.setViewVisibility(R.id.day_label, GONE);
         }
 
+        // Background
+        eventView.setInt(R.id.event_background, "setColorFilter", getEventBackgroundColor(context, event));
+
         // Color
         eventView.setInt(R.id.event_color, "setColorFilter", event.getColor());
 
@@ -35,6 +40,14 @@ public class EventViewCreator {
         }
 
         return eventView;
+    }
+
+    private static int getEventBackgroundColor(Context context, UpNextEvent event) {
+        if (event.isAllDay()) {
+            return event.getColor();
+        } else {
+            return ContextCompat.getColor(context, R.color.background_event);
+        }
     }
 /*
     private static int getTextColor(Context context, UpNextEvent event) {
