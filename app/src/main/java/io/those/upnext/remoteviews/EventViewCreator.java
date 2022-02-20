@@ -16,6 +16,7 @@ import io.those.upnext.model.UpNextEvent;
 
 public class EventViewCreator {
     private static final String DATE_PATTERN = "EEEE, d. LLL";
+    private static final int NIGHT_MODE_ALPHA = 130;
 
     public static RemoteViews createEventView(Context context, UpNextEvent prevEvent, UpNextEvent event, boolean isTodayEvent) {
         RemoteViews eventView;
@@ -73,10 +74,24 @@ public class EventViewCreator {
             eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
         }
 
-        if (!isNightModeActive(context)) {
-            eventView.setInt(R.id.event_background, "setImageAlpha", 130);
-        }
+        eventView.setInt(R.id.event_background, "setImageAlpha", NIGHT_MODE_ALPHA);
     }
+/*
+    private static int getTextColor(Context context, int elementColor) {
+        // Text color
+        int colorFont      = ContextCompat.getColor(context, R.color.font_event);
+        int colorFontALt   = ContextCompat.getColor(context, R.color.font_event_alt);
+        int chosenFontColor = colorFont;
+
+        if (ColorUtils.calculateContrast(colorFont, elementColor) < 4.5) {
+            // need different font (https://miromatech.com/android/contrast-ratio/)
+            chosenFontColor = colorFontALt;
+        }
+
+        return chosenFontColor;
+    }
+ */
+
 
     private static boolean isNightModeActive(Context context) {
         int nightModeFlags =
@@ -87,32 +102,10 @@ public class EventViewCreator {
                 return true;
 
             case Configuration.UI_MODE_NIGHT_NO:
-                return false;
-
             case Configuration.UI_MODE_NIGHT_UNDEFINED:
                 return false;
         }
 
         return false;
     }
-/*
-    private static int getTextColor(Context context, UpNextEvent event) {
-        // Text color
-        int colorFont      = ContextCompat.getColor(context, R.color.font_event);
-        int colorFontDark  = ContextCompat.getColor(context, R.color.font_event_dark);
-        int colorFontLight = ContextCompat.getColor(context, R.color.font_event_light);
-        int chosenFontColor = colorFont;
-
-        if (event.isAllDay()) {
-            // need different font (https://miromatech.com/android/contrast-ratio/)
-            if (ColorUtils.calculateContrast(colorFontDark, event.getColor()) < 4.5) {
-                chosenFontColor = colorFontLight;
-            } else {
-                chosenFontColor = colorFontDark;
-            }
-        }
-
-        return chosenFontColor;
-    }
- */
 }

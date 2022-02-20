@@ -34,7 +34,7 @@ public class WidgetViewCreator {
         views.setOnClickPendingIntent(R.id.btn_refresh, pendingUpdateIntent);
 
         LocalDate today = LocalDate.now();
-        // LocalDate today = LocalDate.of(2021, Month.AUGUST, 2);
+        // LocalDate today = LocalDate.of(2021, Month.NOVEMBER, 8);
 
         views.setTextViewText(R.id.today_date, today.format(ofPattern("EEEE, d. LLL")));
 
