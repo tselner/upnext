@@ -30,7 +30,6 @@ public class UpNextActivity extends AppCompatActivity {
     public void onClickRefresh(View view) {
         checkPermission();
         refreshUI();
-        Toast.makeText(this, "Refresh has been clicked!", Toast.LENGTH_SHORT).show();
     }
 
     private void refreshUI() {

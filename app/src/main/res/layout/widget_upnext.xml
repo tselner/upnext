@@ -6,33 +6,48 @@
     android:layout_width="match_parent"
     android:background="@drawable/background_widget">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:background="@drawable/background_header"
-        android:paddingHorizontal="8dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="12dp"
         android:id="@+id/header">
+
+        <ImageView
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_baseline_refresh_24" />
+
+        <TextView
+            android:id="@+id/last_updated"
+            android:textColor="@color/font_header"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@id/btn_refresh"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical|left" />
 
         <TextView
             android:id="@+id/header_text"
             android:textColor="@color/font_header"
             android:textFontWeight="800"
             android:textSize="14sp"
-            android:layout_width="0dp"
-            android:layout_weight="9"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|left" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical|right" />
 
-        <ImageView
-            android:id="@+id/btn_refresh"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|right"
-            android:padding="4dp"
-            android:src="@drawable/ic_baseline_refresh_24" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

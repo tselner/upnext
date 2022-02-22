@@ -1,7 +1,6 @@
 package io.those.upnext.remoteviews;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
-import static io.those.upnext.receiver.UpNextWidgetProvider.ACTION_WIDGET_REFRESH;
 import static io.those.upnext.service.EventsService.EXTRA_DATE_PATTERN;
 import static io.those.upnext.service.EventsService.EXTRA_END;
 import static io.those.upnext.service.EventsService.EXTRA_IS_TODAY_EVENT;
@@ -15,7 +14,9 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 import io.those.upnext.R;
 import io.those.upnext.receiver.UpNextWidgetProvider;
@@ -28,15 +29,16 @@ public class WidgetViewCreator {
 
         // Refresh Button
         Intent updateIntent = new Intent(context, UpNextWidgetProvider.class);
-        updateIntent.setAction(ACTION_WIDGET_REFRESH);
-        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context, 0, updateIntent, 0);
+        updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] {appWidgetId});
+        PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context, appWidgetId, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.btn_refresh, pendingUpdateIntent);
 
         LocalDate today = LocalDate.now();
         // LocalDate today = LocalDate.of(2022, Month.FEBRUARY, 21);
 
         views.setTextViewText(R.id.header_text, "up next");
+        views.setTextViewText(R.id.last_updated, LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
         views.setTextViewText(R.id.left_header_weekday, today.format(ofPattern("EEEE")));
         views.setTextViewText(R.id.left_header_date, today.format(ofPattern("d")));
 
