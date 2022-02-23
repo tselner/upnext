@@ -47,16 +47,7 @@ public class EventsService extends RemoteViewsService {
             this.isTodayEvent = intent.getBooleanExtra(EXTRA_IS_TODAY_EVENT, true);
         }
 
-        CalendarRepository getCalendarRepositoryInstance(Context context) {
-            return new CalendarRepository(context.getContentResolver());
-        }
-
-        EventRepository getEventRepositoryInstance(Context context) {
-            return new EventRepository(context.getContentResolver());
-        }
-
-        @Override
-        public void onCreate() {
+        private void populateEvents() {
             CalendarRepository calRep = getCalendarRepositoryInstance(context);
             EventRepository evtRep    = getEventRepositoryInstance(context);
 
@@ -75,14 +66,22 @@ public class EventsService extends RemoteViewsService {
             });
         }
 
+        CalendarRepository getCalendarRepositoryInstance(Context context) {
+            return new CalendarRepository(context.getContentResolver());
+        }
+
+        EventRepository getEventRepositoryInstance(Context context) {
+            return new EventRepository(context.getContentResolver());
+        }
+
+        @Override
+        public void onCreate() {
+            populateEvents();
+        }
+
         @Override
         public void onDataSetChanged() {
-            // This is triggered when you call AppWidgetManager notifyAppWidgetViewDataChanged
-            // on the collection view corresponding to this factory. You can do heaving lifting in
-            // here, synchronously. For example, if you need to process an image, fetch something
-            // from the network, etc., it is ok to do it here, synchronously. The widget will remain
-            // in its current state while work is being done here, so you don't need to worry about
-            // locking up the widget.
+            populateEvents();
         }
 
         @Override
@@ -122,7 +121,7 @@ public class EventsService extends RemoteViewsService {
 
         @Override
         public boolean hasStableIds() {
-            return false;
+            return true;
         }
     }
 }
