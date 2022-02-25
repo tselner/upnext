@@ -11,6 +11,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.time.LocalDate;
@@ -25,6 +26,8 @@ import io.those.upnext.util.PermissionUtil;
 
 public class WidgetViewCreator {
     public static RemoteViews createWidgetView(Context context, int appWidgetId) {
+        Log.i(WidgetViewCreator.class.getName(), String.format("createWidgetView with id %d ...", appWidgetId));
+
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upnext);
 
         // Refresh Button
@@ -50,6 +53,7 @@ public class WidgetViewCreator {
                     createServiceIntent(context, appWidgetId, today.plusDays(1), today.plusDays(2),false));
         }
 
+        Log.i(WidgetViewCreator.class.getName(), String.format("createWidgetView with id %d finished!", appWidgetId));
         return views;
     }
 

@@ -2,6 +2,7 @@ package io.those.upnext.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -28,6 +29,8 @@ public class EventsService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        Log.i(EventsService.class.getName(), "onGetViewFactory ...");
+        Log.i(EventsService.class.getName(), "onGetViewFactory finished!");
         return new EventsRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 
@@ -48,6 +51,7 @@ public class EventsService extends RemoteViewsService {
         }
 
         private void populateEvents() {
+            Log.i(EventsRemoteViewsFactory.class.getName(), "populateEvents ...");
             CalendarRepository calRep = getCalendarRepositoryInstance(context);
             EventRepository evtRep    = getEventRepositoryInstance(context);
 
@@ -64,6 +68,7 @@ public class EventsService extends RemoteViewsService {
                 List<UpNextEvent> eventsForThatDay = evtRep.getEventsByDay(cals, day, ZoneId.systemDefault());
                 events.addAll(eventsForThatDay);
             });
+            Log.i(EventsRemoteViewsFactory.class.getName(), String.format("populateEvents with %d events finished!", events.size()));
         }
 
         CalendarRepository getCalendarRepositoryInstance(Context context) {
@@ -76,12 +81,16 @@ public class EventsService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
+            Log.i(EventsRemoteViewsFactory.class.getName(), "onCreate ...");
             populateEvents();
+            Log.i(EventsRemoteViewsFactory.class.getName(), "onCreate finished!");
         }
 
         @Override
         public void onDataSetChanged() {
+            Log.i(EventsRemoteViewsFactory.class.getName(), "onDataSetChanged ...");
             populateEvents();
+            Log.i(EventsRemoteViewsFactory.class.getName(), "onDataSetChanged finished!");
         }
 
         @Override
@@ -96,12 +105,15 @@ public class EventsService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int position) {
+            RemoteViews view = null;
+
+            Log.i(EventsRemoteViewsFactory.class.getName(), String.format("getViewAt with position %d ...", position));
             if (position < events.size()) {
-                return EventViewCreator.createEventView(context, position > 0 ? events.get(position - 1) : null, events.get(position), isTodayEvent);
-            } else {
-                return null;
+                view = EventViewCreator.createEventView(context, position > 0 ? events.get(position - 1) : null, events.get(position), isTodayEvent);
             }
 
+            Log.i(EventsRemoteViewsFactory.class.getName(), String.format("getViewAt with position %d finished!", position));
+            return view;
         }
 
         @Override
