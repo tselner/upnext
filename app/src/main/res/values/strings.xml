@@ -1,8 +1,4 @@
 <resources>
     <string name="app_name">up next</string>
-    <string name="description">here should be a description</string>
-    <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
-    <string name="day_after_tomorrow">Day after tomorrow</string>
-    <string name="no_events">[-]</string>
+    <string name="description">events today and up next</string>
 </resources>

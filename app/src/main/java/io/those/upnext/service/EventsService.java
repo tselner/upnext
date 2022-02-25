@@ -1,5 +1,6 @@
 package io.those.upnext.service;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -34,12 +35,15 @@ public class EventsService extends RemoteViewsService {
         return new EventsRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 
-    static class EventsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-        private final Context context;
-        private final LocalDate start;
-        private final LocalDate end;
-        private final boolean isTodayEvent;
+    public static class EventsRemoteViewsFactory extends BroadcastReceiver implements RemoteViewsService.RemoteViewsFactory {
+        private Context context;
+        private LocalDate start;
+        private LocalDate end;
+        private boolean isTodayEvent;
         private final List<UpNextEvent> events = new ArrayList<>();
+
+        public EventsRemoteViewsFactory() {
+        }
 
         public EventsRemoteViewsFactory(Context context, Intent intent) {
             this.context = context;
@@ -48,35 +52,6 @@ public class EventsService extends RemoteViewsService {
             this.end   = LocalDate.parse(intent.getStringExtra(EXTRA_END)  , DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
 
             this.isTodayEvent = intent.getBooleanExtra(EXTRA_IS_TODAY_EVENT, true);
-        }
-
-        private void populateEvents() {
-            Log.i(EventsRemoteViewsFactory.class.getName(), "populateEvents ...");
-            CalendarRepository calRep = getCalendarRepositoryInstance(context);
-            EventRepository evtRep    = getEventRepositoryInstance(context);
-
-            List<UpNextCalendar> cals = calRep.getCalendars();
-
-            long numberOfDaysBetween = ChronoUnit.DAYS.between(start, end) + 1;
-            List<LocalDate> days = IntStream.iterate(0, i -> i + 1)
-                    .limit(numberOfDaysBetween)
-                    .mapToObj(start::plusDays)
-                    .collect(Collectors.toList());
-
-            events.clear();
-            days.forEach(day -> {
-                List<UpNextEvent> eventsForThatDay = evtRep.getEventsByDay(cals, day, ZoneId.systemDefault());
-                events.addAll(eventsForThatDay);
-            });
-            Log.i(EventsRemoteViewsFactory.class.getName(), String.format("populateEvents with %d events finished!", events.size()));
-        }
-
-        CalendarRepository getCalendarRepositoryInstance(Context context) {
-            return new CalendarRepository(context.getContentResolver());
-        }
-
-        EventRepository getEventRepositoryInstance(Context context) {
-            return new EventRepository(context.getContentResolver());
         }
 
         @Override
@@ -89,8 +64,15 @@ public class EventsService extends RemoteViewsService {
         @Override
         public void onDataSetChanged() {
             Log.i(EventsRemoteViewsFactory.class.getName(), "onDataSetChanged ...");
-            populateEvents();
+            // populateEvents();
             Log.i(EventsRemoteViewsFactory.class.getName(), "onDataSetChanged finished!");
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(EventsRemoteViewsFactory.class.getName(), "onReceive ...");
+            populateEvents();
+            Log.i(EventsRemoteViewsFactory.class.getName(), "onReceive finished!");
         }
 
         @Override
@@ -134,6 +116,35 @@ public class EventsService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return true;
+        }
+
+        CalendarRepository getCalendarRepositoryInstance(Context context) {
+            return new CalendarRepository(context.getContentResolver());
+        }
+
+        EventRepository getEventRepositoryInstance(Context context) {
+            return new EventRepository(context.getContentResolver());
+        }
+
+        private void populateEvents() {
+            Log.i(EventsRemoteViewsFactory.class.getName(), "populateEvents ...");
+            CalendarRepository calRep = getCalendarRepositoryInstance(context);
+            EventRepository evtRep    = getEventRepositoryInstance(context);
+
+            List<UpNextCalendar> cals = calRep.getCalendars();
+
+            long numberOfDaysBetween = ChronoUnit.DAYS.between(start, end) + 1;
+            List<LocalDate> days = IntStream.iterate(0, i -> i + 1)
+                    .limit(numberOfDaysBetween)
+                    .mapToObj(start::plusDays)
+                    .collect(Collectors.toList());
+
+            events.clear();
+            days.forEach(day -> {
+                List<UpNextEvent> eventsForThatDay = evtRep.getEventsByDay(cals, day, ZoneId.systemDefault());
+                events.addAll(eventsForThatDay);
+            });
+            Log.i(EventsRemoteViewsFactory.class.getName(), String.format("populateEvents with %d events finished!", events.size()));
         }
     }
 }
