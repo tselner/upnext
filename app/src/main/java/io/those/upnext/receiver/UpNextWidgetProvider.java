@@ -10,7 +10,7 @@ import static android.content.Intent.ACTION_TIME_CHANGED;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static io.those.upnext.service.EventsService.EXTRA_DATE_PATTERN;
 import static io.those.upnext.service.EventsService.EXTRA_END;
-import static io.those.upnext.service.EventsService.EXTRA_IS_TODAY_EVENT;
+import static io.those.upnext.service.EventsService.EXTRA_IS_TODAY_VIEW;
 import static io.those.upnext.service.EventsService.EXTRA_START;
 
 import android.app.PendingIntent;
@@ -81,12 +81,12 @@ public class UpNextWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private Intent createServiceIntent(Context context, int appWidgetId, LocalDate start, LocalDate end, boolean isTodayEvent) {
+    private Intent createServiceIntent(Context context, int appWidgetId, LocalDate start, LocalDate end, boolean isTodayView) {
         Intent intent = new Intent(context, EventsService.class);
         intent.putExtra(EXTRA_APPWIDGET_ID, appWidgetId);
         intent.putExtra(EXTRA_START, start.format(ofPattern(EXTRA_DATE_PATTERN)));
         intent.putExtra(EXTRA_END, end.format(ofPattern(EXTRA_DATE_PATTERN)));
-        intent.putExtra(EXTRA_IS_TODAY_EVENT, isTodayEvent);
+        intent.putExtra(EXTRA_IS_TODAY_VIEW, isTodayView);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         return intent;
     }

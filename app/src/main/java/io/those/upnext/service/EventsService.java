@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import io.those.upnext.model.UpNextCalendar;
+import io.those.upnext.model.UpNextDayLabel;
 import io.those.upnext.model.UpNextEvent;
+import io.those.upnext.model.UpNextListElement;
 import io.those.upnext.remoteviews.EventViewCreator;
 import io.those.upnext.repository.CalendarRepository;
 import io.those.upnext.repository.EventRepository;
@@ -29,7 +31,7 @@ import io.those.upnext.repository.EventRepository;
 public class EventsService extends RemoteViewsService {
     public static final String EXTRA_START = "start";
     public static final String EXTRA_END = "end";
-    public static final String EXTRA_IS_TODAY_EVENT = "isTodayEvent";
+    public static final String EXTRA_IS_TODAY_VIEW = "isTodayView";
     public static final String EXTRA_DATE_PATTERN = "yyy-MM-dd";
 
     @Override
@@ -43,8 +45,8 @@ public class EventsService extends RemoteViewsService {
         private final Context context;
         private final LocalDate start;
         private final LocalDate end;
-        private final boolean isTodayEvent;
-        private final List<UpNextEvent> events = new ArrayList<>();
+        private final boolean isTodayView;
+        private final List<UpNextListElement> elements = new ArrayList<>();
         private final CalendarRepository calendarRepository;
         private final EventRepository eventRepository;
         
@@ -66,49 +68,49 @@ public class EventsService extends RemoteViewsService {
             this.start = LocalDate.parse(intent.getStringExtra(EXTRA_START), DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
             this.end   = LocalDate.parse(intent.getStringExtra(EXTRA_END)  , DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
 
-            this.isTodayEvent = intent.getBooleanExtra(EXTRA_IS_TODAY_EVENT, true);
+            this.isTodayView = intent.getBooleanExtra(EXTRA_IS_TODAY_VIEW, true);
         }
 
         @Override
         public void onCreate() {
             Log.i(toString(), "onCreate ...");
-            // populateEvents(); // not necessary, onDataSetChanged gets called autom. after onCreate
+            // populateElements(); // not necessary, onDataSetChanged gets called autom. after onCreate
             Log.i(toString(), "onCreate finished!");
         }
 
         @Override
         public void onDataSetChanged() {
             Log.i(toString(), "onDataSetChanged ...");
-            populateEvents();
+            populateElements();
             Log.i(toString(), "onDataSetChanged finished!");
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(toString(), String.format("onReceive with Action %s ...", intent.getAction()));
-            populateEvents();
+            populateElements();
             Log.i(toString(), String.format("onReceive with Action %s finished!", intent.getAction()));
         }
 
         @Override
         public void onDestroy() {
-            events.clear();
+            elements.clear();
         }
 
         @Override
         public int getCount() {
-            return events.size();
+            return elements.size();
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
             RemoteViews view = null;
 
-            if (position < events.size()) {
+            if (position < elements.size()) {
                 Log.i(toString(), String.format("getViewAt with position %d ...", position));
-                UpNextEvent currEvent = events.get(position);
-                view = EventViewCreator.createEventView(context, position > 0 ? events.get(position - 1) : null, currEvent, isTodayEvent);
-                Log.i(toString(), String.format("getViewAt with position %d finished with event %s", position, currEvent));
+                UpNextListElement currElement = elements.get(position);
+                view = EventViewCreator.createListElementView(context, currElement, isTodayView);
+                Log.i(toString(), String.format("getViewAt with position %d finished with element [%s]", position, currElement));
             }
 
             return view;
@@ -121,7 +123,33 @@ public class EventsService extends RemoteViewsService {
 
         @Override
         public int getViewTypeCount() {
-            return 2;
+            int viewTypeCount = 0;
+
+            if (dayLabelsPresent(elements)) {
+                viewTypeCount++;
+            }
+
+            if (allDayEventsPresent(elements)) {
+                viewTypeCount++;
+            }
+
+            if (subDayEventsPresent(elements)) {
+                viewTypeCount++;
+            }
+
+            return viewTypeCount;
+        }
+
+        private boolean dayLabelsPresent(List<UpNextListElement> elements) {
+            return elements.stream().anyMatch(element -> element instanceof UpNextDayLabel);
+        }
+
+        private boolean allDayEventsPresent(List<UpNextListElement> elements) {
+            return elements.stream().anyMatch(element -> element instanceof UpNextEvent && ((UpNextEvent) element).isAllDay());
+        }
+
+        private boolean subDayEventsPresent(List<UpNextListElement> elements) {
+            return elements.stream().anyMatch(element -> element instanceof UpNextEvent && !((UpNextEvent) element).isAllDay());
         }
 
         @Override
@@ -131,11 +159,11 @@ public class EventsService extends RemoteViewsService {
 
         @Override
         public boolean hasStableIds() {
-            return true;
+            return false;
         }
 
-        private void populateEvents() {
-            Log.i(toString(), "populateEvents ...");
+        private void populateElements() {
+            Log.i(toString(), "populateElements ...");
 
             List<UpNextCalendar> cals = calendarRepository.getCalendars();
 
@@ -145,12 +173,15 @@ public class EventsService extends RemoteViewsService {
                     .mapToObj(start::plusDays)
                     .collect(Collectors.toList());
 
-            events.clear();
+            elements.clear();
             days.forEach(day -> {
                 List<UpNextEvent> eventsForThatDay = eventRepository.getEventsByDay(cals, day, ZoneId.systemDefault());
-                events.addAll(eventsForThatDay);
+                if (!isTodayView && !eventsForThatDay.isEmpty()) {
+                    elements.add(new UpNextDayLabel(day));
+                }
+                elements.addAll(eventsForThatDay);
             });
-            Log.i(toString(), String.format("populateEvents with %d events finished!", events.size()));
+            Log.i(toString(), String.format("populateElements with %d elements finished!", elements.size()));
         }
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class UpNextEvent implements Comparable<UpNextEvent> {
+public class UpNextEvent extends UpNextListElement implements Comparable<UpNextEvent> {
     private static final int ALPHA_FOR_EVENT_BACKGROUND = 0x40000000;
     private final DateTimeFormatter formatter_time = DateTimeFormatter.ofPattern("HH:mm");
 

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static io.those.upnext.service.EventsService.EXTRA_DATE_PATTERN;
 import static io.those.upnext.service.EventsService.EXTRA_END;
-import static io.those.upnext.service.EventsService.EXTRA_IS_TODAY_EVENT;
+import static io.those.upnext.service.EventsService.EXTRA_IS_TODAY_VIEW;
 import static io.those.upnext.service.EventsService.EXTRA_START;
 
 import android.content.ContentResolver;
@@ -72,7 +72,7 @@ public class EventsRemoteViewsFactoryTest {
         Intent intent = mock(Intent.class);
         doReturn(DAY1.format(DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN))).when(intent).getStringExtra(eq(EXTRA_START));
         doReturn(DAY3.format(DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN))).when(intent).getStringExtra(eq(EXTRA_END));
-        doReturn(true).when(intent).getBooleanExtra(eq(EXTRA_IS_TODAY_EVENT), eq(false));
+        doReturn(true).when(intent).getBooleanExtra(eq(EXTRA_IS_TODAY_VIEW), eq(false));
 
         EventsService.EventsRemoteViewsFactory factory = spy(new EventsService.EventsRemoteViewsFactory(context, intent));
 
