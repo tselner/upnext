@@ -78,12 +78,12 @@ public class EventsRemoteViewsFactoryTest {
 
         CalendarRepository calRep = mock(CalendarRepository.class);
         doReturn(Collections.singletonList(CAL1)).when(calRep).getCalendars();
-        doReturn(calRep).when(factory).getCalendarRepositoryInstance(nullable(Context.class));
+        // TODO mocking: doReturn(calRep).when(factory).getCalendarRepositoryInstance(nullable(Context.class));
 
         EventRepository eveRep = mock(EventRepository.class);
         DAYS.forEach(day -> doReturn(EVENTS_PER_DAY.get(day))
                 .when(eveRep).getEventsByDay(any(), eq(day), nullable(ZoneId.class)));
-        doReturn(eveRep).when(factory).getEventRepositoryInstance(nullable(Context.class));
+        // TODO mocking: doReturn(eveRep).when(factory).getEventRepositoryInstance(nullable(Context.class));
 
         factory.onCreate();
         return factory;

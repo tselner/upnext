@@ -3,11 +3,13 @@ package io.those.upnext.repository;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.CalendarContract;
+import android.util.Log;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -44,6 +46,7 @@ public class EventRepository extends Repository {
             ")";
 
     public List<UpNextEvent> getEvents(UpNextCalendar calendar, LocalDate day) {
+        Log.i(EventRepository.class.getSimpleName(), String.format("getEvents for calendar %s on day %s ...", calendar, day.format(DateTimeFormatter.BASIC_ISO_DATE)));
         List<UpNextEvent> events = new ArrayList<>();
 
         Cursor cur = getContentResolver().query(
@@ -73,6 +76,7 @@ public class EventRepository extends Repository {
         cur.close();
 
         Collections.sort(events);
+        Log.i(EventRepository.class.getSimpleName(), String.format("getEvents for calendar %s on day %s finished with %d events!", calendar, day.format(DateTimeFormatter.BASIC_ISO_DATE), events.size()));
         return events;
     }
 
@@ -91,9 +95,9 @@ public class EventRepository extends Repository {
         List<UpNextEvent> events = new ArrayList<>();
 
         for (int i = 0; i < countEvents; i++) {
-            long startInMillis = 0L;
-            long endInMillis = 0L;
-            boolean allDay = false;
+            long startInMillis;
+            long endInMillis;
+            boolean allDay;
 
             if (i % 2 == 0) {
                 // all day

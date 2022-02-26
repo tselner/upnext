@@ -32,7 +32,7 @@ public class UpNextWidgetProvider extends AppWidgetProvider {
 /*
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(UpNextWidgetProvider.class.getName(), "onReceive ...");
+        Log.i(UpNextWidgetProvider.class.getSimpleName(), "onReceive ...");
 
         if (isUpdateIntent(intent)) {
             // Calendar provider changed notification
@@ -47,15 +47,15 @@ public class UpNextWidgetProvider extends AppWidgetProvider {
             super.onReceive(context, intent);
         }
 
-        Log.i(UpNextWidgetProvider.class.getName(), "onReceive finished!");
+        Log.i(UpNextWidgetProvider.class.getSimpleName(), "onReceive finished!");
     }
  */
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.i(UpNextWidgetProvider.class.getName(), "onUpdate ...");
+        Log.i(UpNextWidgetProvider.class.getSimpleName(), "onUpdate ...");
         performUpdate(context, appWidgetManager, appWidgetIds);
-        Log.i(UpNextWidgetProvider.class.getName(), "onUpdate finished!");
+        Log.i(UpNextWidgetProvider.class.getSimpleName(), "onUpdate finished!");
     }
 
     private void performUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {

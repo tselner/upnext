@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.provider.CalendarContract.Calendars;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,7 @@ public class CalendarRepository extends Repository {
     }
 
     public List<UpNextCalendar> getCalendars() {
+        Log.i(CalendarRepository.class.getSimpleName(), "getCalendars ...");
         List<UpNextCalendar> calendars = new ArrayList<>();
 
         Cursor cur = getContentResolver().query(Calendars.CONTENT_URI, REQUESTED_CALENDAR_FIELDS, null, null, null);
@@ -44,6 +46,7 @@ public class CalendarRepository extends Repository {
         cur.close();
 
         Collections.sort(calendars);
+        Log.i(CalendarRepository.class.getSimpleName(), String.format("getCalendars finished with %d calendars!", calendars.size()));
         return calendars;
     }
 
