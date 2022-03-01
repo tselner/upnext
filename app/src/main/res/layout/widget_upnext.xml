@@ -90,6 +90,11 @@
                 android:divider="@null"
                 android:dividerHeight="4dp"
                 android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/today_events_empty"
+                android:text="Nothing's up today."
+                style="@style/noElements" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,6 +112,12 @@
                 android:divider="@null"
                 android:dividerHeight="4dp"
                 android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/upnext_events_empty"
+                android:text="Nothing's up next."
+                android:gravity="center"
+                style="@style/noElements" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
