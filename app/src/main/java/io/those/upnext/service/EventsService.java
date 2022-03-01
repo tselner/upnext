@@ -24,7 +24,7 @@ import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.model.UpNextDayLabel;
 import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.model.UpNextListElement;
-import io.those.upnext.remoteviews.EventViewCreator;
+import io.those.upnext.remoteviews.ListViewElementCreator;
 import io.those.upnext.repository.CalendarRepository;
 import io.those.upnext.repository.EventRepository;
 
@@ -109,7 +109,7 @@ public class EventsService extends RemoteViewsService {
             if (position < elements.size()) {
                 Log.i(toString(), String.format("getViewAt with position %d ...", position));
                 UpNextListElement currElement = elements.get(position);
-                view = EventViewCreator.createListElementView(context, currElement, isTodayView);
+                view = ListViewElementCreator.createListElementView(context, currElement, isTodayView);
                 Log.i(toString(), String.format("getViewAt with position %d finished with element [%s]", position, currElement));
             }
 

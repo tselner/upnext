@@ -13,7 +13,7 @@ import io.those.upnext.model.UpNextDayLabel;
 import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.model.UpNextListElement;
 
-public class EventViewCreator {
+public class ListViewElementCreator {
     private static final int ALPHA = 130;
 
     public static RemoteViews createListElementView(Context context, UpNextListElement currElement, boolean isTodayEvent) {
