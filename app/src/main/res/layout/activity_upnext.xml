@@ -1,50 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background_widget"
     android:padding="16dp"
     tools:context=".activity.UpNextActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/header_available_calendars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="Available calendars"
-            android:textSize="18sp"
-            android:textColor="@color/font_header" />
-
-        <ImageView
-            android:id="@+id/btn_refresh_calendars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:padding="4dp"
-            android:src="@drawable/ic_baseline_refresh_24"
-            android:onClick="onClickRefresh"
-            app:tint="@color/font_header" />
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/text_no_calendars"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No calendars available at the moment."
-        android:textSize="14sp"
-        android:textColor="@color/font_accent"/>
 
     <ListView
         android:id="@+id/list_available_calendars"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:divider="@null"
         android:dividerHeight="8dp" />
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/list_available_calendars_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="No calendars available."
+        android:textSize="18sp"
+        android:textColor="@color/font_accent"/>
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_toolbar"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/toolbarItem"
+            android:text="Calendars" />
+
+        <TextView
+            style="@style/toolbarItem"
+            android:text="Help" />
+
+        <TextView
+            style="@style/toolbarItem"
+            android:text="About" />
+
+    </LinearLayout>
+</RelativeLayout>

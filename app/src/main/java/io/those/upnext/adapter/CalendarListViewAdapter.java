@@ -1,12 +1,16 @@
 package io.those.upnext.adapter;
 
+import static io.those.upnext.util.DayNightUtil.isDayMode;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,16 +58,21 @@ public class CalendarListViewAdapter extends BaseAdapter {
 
         UpNextCalendar cal = (UpNextCalendar) getItem(position);
 
+        // background
+        ImageView backgroundView = convertView.findViewById(R.id.calendar_background);
+        if (isDayMode(context)) {
+            backgroundView.setColorFilter(cal.getColor());
+            backgroundView.setImageAlpha(UpNextCalendar.BACKGROUND_ALPHA);
+        } else {
+            backgroundView.setColorFilter(ContextCompat.getColor(context, R.color.background_event));
+        }
+
         // color
-        convertView.findViewById(R.id.calendar_color).setBackgroundColor(cal.getColor());
+        ImageView colorView = convertView.findViewById(R.id.calendar_color);
+        colorView.setColorFilter(cal.getColor());
 
         // name
-        ((TextView) convertView.findViewById(R.id.calendar_name)).setText(cal.getDisplayName());
-
-        // visible
-        CheckBox checkBoxVisible = convertView.findViewById(R.id.calendar_visible);
-        checkBoxVisible.setClickable(false);
-        checkBoxVisible.setChecked(Boolean.TRUE.equals(cal.getVisible()));
+        ((TextView) convertView.findViewById(R.id.calendar_title)).setText(cal.getDisplayName());
 
         return convertView;
     }

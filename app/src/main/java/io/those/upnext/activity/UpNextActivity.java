@@ -2,29 +2,38 @@ package io.those.upnext.activity;
 
 import static android.Manifest.permission.READ_CALENDAR;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.List;
 
 import io.those.upnext.R;
 import io.those.upnext.adapter.CalendarListViewAdapter;
-import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.repository.CalendarRepository;
 import io.those.upnext.util.PermissionUtil;
 
-public class UpNextActivity extends AppCompatActivity {
+public class UpNextActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkPermission();
         refreshUI();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (PermissionUtil.isReadCalendarGranted(requestCode, grantResults)) {
+            Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
+            refreshUI();
+        } else {
+            Toast.makeText(this, "This app requires permission to read your calendar!", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onClickRefresh(View view) {
@@ -35,34 +44,16 @@ public class UpNextActivity extends AppCompatActivity {
     private void refreshUI() {
         setContentView(R.layout.activity_upnext);
 
+        // ListView
+        ListView listViewAvailableCalendars = findViewById(R.id.list_available_calendars);
+        listViewAvailableCalendars.setEmptyView(findViewById(R.id.list_available_calendars_empty));
+
         if (PermissionUtil.checkReadCalendarPermission(this)) {
-            CalendarRepository calRep = new CalendarRepository(getContentResolver());
-            List<UpNextCalendar> cals = calRep.getCalendars();
-
-            if (cals.isEmpty()) {
-                findViewById(R.id.list_available_calendars).setVisibility(View.GONE);
-            } else {
-                findViewById(R.id.text_no_calendars).setVisibility(View.GONE);
-
-                // ListView
-                ListView listViewAvailableCalendars = findViewById(R.id.list_available_calendars);
-                listViewAvailableCalendars.setAdapter(new CalendarListViewAdapter(this, cals));
-            }
-        }
-        else {
-            findViewById(R.id.list_available_calendars).setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (PermissionUtil.isReadCalendarGranted(requestCode, grantResults)) {
-            Toast.makeText(this, "Thank your for your permission to read your calendar!", Toast.LENGTH_SHORT).show();
-            refreshUI();
-        } else {
-            Toast.makeText(this, "This app requires permission to read your calendar!", Toast.LENGTH_SHORT).show();
+            listViewAvailableCalendars.setAdapter(new CalendarListViewAdapter(
+                    this,
+                    new CalendarRepository(getContentResolver()).getCalendars()
+                    )
+            );
         }
     }
 

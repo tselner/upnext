@@ -1,20 +1,21 @@
 package io.those.upnext.remoteviews;
 
 import static android.view.View.GONE;
+import static io.those.upnext.util.DayNightUtil.isDayMode;
+import static io.those.upnext.util.DayNightUtil.isNightMode;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.widget.RemoteViews;
 
 import androidx.core.content.ContextCompat;
 
 import io.those.upnext.R;
+import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.model.UpNextDayLabel;
 import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.model.UpNextListElement;
 
 public class ListViewElementCreator {
-    private static final int ALPHA = 130;
 
     public static RemoteViews createListElementView(Context context, UpNextListElement currElement, boolean isTodayEvent) {
         if (currElement instanceof UpNextEvent) {
@@ -77,30 +78,10 @@ public class ListViewElementCreator {
         // Background & Alpha
         if (isDayMode(context) && event.isAllDay()) {
             eventView.setInt(R.id.event_background, "setColorFilter", event.getColor());
-            eventView.setInt(R.id.event_background, "setImageAlpha", ALPHA);
+            eventView.setInt(R.id.event_background, "setImageAlpha", UpNextCalendar.BACKGROUND_ALPHA);
         } else {
             eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
         }
-    }
-
-    private static boolean isDayMode(Context context) {
-        return !isNightMode(context);
-    }
-
-    private static boolean isNightMode(Context context) {
-        int nightModeFlags =
-                context.getResources().getConfiguration().uiMode &
-                        Configuration.UI_MODE_NIGHT_MASK;
-        switch (nightModeFlags) {
-            case Configuration.UI_MODE_NIGHT_YES:
-                return true;
-
-            case Configuration.UI_MODE_NIGHT_NO:
-            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                return false;
-        }
-
-        return false;
     }
 /*
     private static int getTextColor(Context context, int elementColor) {

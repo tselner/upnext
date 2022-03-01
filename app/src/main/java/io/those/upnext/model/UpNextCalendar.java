@@ -3,6 +3,8 @@ package io.those.upnext.model;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
 public class UpNextCalendar implements Comparable<UpNextCalendar> {
+    public static final int BACKGROUND_ALPHA = 130;
+
     private final Long id;
     private final String name;
     private final String accountName;
