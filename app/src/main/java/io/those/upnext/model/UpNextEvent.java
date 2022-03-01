@@ -12,18 +12,18 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class UpNextEvent extends UpNextListElement implements Comparable<UpNextEvent> {
-    private static final int ALPHA_FOR_EVENT_BACKGROUND = 0x40000000;
     private final DateTimeFormatter formatter_time = DateTimeFormatter.ofPattern("HH:mm");
 
     private final String id;
-    private final UpNextCalendar calendar;
     private final String title;
     private final String description;
     private final Boolean allDay;
     private final Long startInMillis;
     private final Long endInMillis;
     private final String timezone;
-    private final LocalDate day; // the day, for which the event has been read and will be displayed
+
+    private UpNextCalendar calendar;
+    private LocalDate day; // the day, for which the event has been read and will be displayed
 
     public LocalDateTime getStart() {
         return millisToLocalDateTime(getStartInMillis());
@@ -37,20 +37,18 @@ public class UpNextEvent extends UpNextListElement implements Comparable<UpNextE
         return millis != null ? toDateTime(millis, getTimezone() != null ? ZoneId.of(getTimezone()) : ZoneId.systemDefault()) : null;
     }
 
-    public static UpNextEvent of(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone, LocalDate day) {
-        return new UpNextEvent(id, calendar, title, description, allDay, startInMillis, endInMillis, timezone, day);
+    public static UpNextEvent of(String id, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone) {
+        return new UpNextEvent(id, title, description, allDay, startInMillis, endInMillis, timezone);
     }
 
-    private UpNextEvent(String id, UpNextCalendar calendar, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone, LocalDate day) {
+    private UpNextEvent(String id, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone) {
         this.id = id;
-        this.calendar = calendar;
         this.title = title;
         this.description = description;
         this.allDay = allDay;
         this.startInMillis = startInMillis;
         this.endInMillis = endInMillis;
         this.timezone = timezone;
-        this.day = day;
     }
 
     @Override
@@ -112,14 +110,6 @@ public class UpNextEvent extends UpNextListElement implements Comparable<UpNextE
         return getCalendar().getColor();
     }
 
-    public int getAlpha() {
-        return ALPHA_FOR_EVENT_BACKGROUND;
-    }
-
-    public int getAlphaColor() {
-        return (getColor() & 0x00FFFFFF) | ALPHA_FOR_EVENT_BACKGROUND;
-    }
-
     public String getId() {
         return id;
     }
@@ -152,7 +142,15 @@ public class UpNextEvent extends UpNextListElement implements Comparable<UpNextE
         return timezone;
     }
 
+    public void setCalendar(UpNextCalendar calendar) {
+        this.calendar = calendar;
+    }
+
     public LocalDate getDay() {
         return day;
+    }
+
+    public void setDay(LocalDate day) {
+        this.day = day;
     }
 }

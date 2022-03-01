@@ -7,6 +7,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 public class TimeUtil {
+    public static final ZoneId UTC = ZoneId.of("UTC");
+
     public static long toMillis(LocalDate date, ZoneId zoneId) {
         return toMillis(date.atStartOfDay(), zoneId);
     }

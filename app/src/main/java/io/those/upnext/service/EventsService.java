@@ -12,7 +12,6 @@ import android.widget.RemoteViewsService;
 import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -175,7 +174,7 @@ public class EventsService extends RemoteViewsService {
 
             elements.clear();
             days.forEach(day -> {
-                List<UpNextEvent> eventsForThatDay = eventRepository.getEventsByDay(cals, day, ZoneId.systemDefault());
+                List<UpNextEvent> eventsForThatDay = eventRepository.getEventsByDay(cals, day);
                 if (!isTodayView && !eventsForThatDay.isEmpty()) {
                     elements.add(new UpNextDayLabel(day));
                 }
