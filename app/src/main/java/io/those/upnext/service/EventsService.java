@@ -5,7 +5,6 @@ import static java.time.format.DateTimeFormatter.BASIC_ISO_DATE;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -19,12 +18,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.model.UpNextDayLabel;
 import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.model.UpNextListElement;
 import io.those.upnext.remoteviews.ListViewElementCreator;
-import io.those.upnext.repository.CalendarRepository;
 import io.those.upnext.repository.EventRepository;
 
 public class EventsService extends RemoteViewsService {
@@ -35,8 +32,6 @@ public class EventsService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.i(EventsService.class.getSimpleName(), "onGetViewFactory ...");
-        Log.i(EventsService.class.getSimpleName(), "onGetViewFactory finished!");
         return new EventsRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 
@@ -46,14 +41,13 @@ public class EventsService extends RemoteViewsService {
         private final LocalDate end;
         private final boolean isTodayView;
         private final List<UpNextListElement> elements = new ArrayList<>();
-        private final CalendarRepository calendarRepository;
         private final EventRepository eventRepository;
         
         @NonNull
         @Override
         public String toString() {
             return String.format("%s [%s - %s]",
-                    EventsRemoteViewsFactory.class.getSimpleName(),
+                    getClass().getSimpleName(),
                     start != null ? start.format(BASIC_ISO_DATE) : "?",
                     end   != null ? end  .format(BASIC_ISO_DATE) : "?");
         }
@@ -61,8 +55,7 @@ public class EventsService extends RemoteViewsService {
         public EventsRemoteViewsFactory(Context context, Intent intent) {
             this.context = context;
 
-            this.calendarRepository = new CalendarRepository(context.getContentResolver());
-            this.eventRepository    = new EventRepository(context.getContentResolver());
+            this.eventRepository = new EventRepository(context.getContentResolver());
 
             this.start = LocalDate.parse(intent.getStringExtra(EXTRA_START), DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
             this.end   = LocalDate.parse(intent.getStringExtra(EXTRA_END)  , DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
@@ -72,23 +65,16 @@ public class EventsService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-            Log.i(toString(), "onCreate ...");
-            // populateElements(); // not necessary, onDataSetChanged gets called autom. after onCreate
-            Log.i(toString(), "onCreate finished!");
         }
 
         @Override
         public void onDataSetChanged() {
-            Log.i(toString(), "onDataSetChanged ...");
             populateElements();
-            Log.i(toString(), "onDataSetChanged finished!");
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(toString(), String.format("onReceive with Action %s ...", intent.getAction()));
             populateElements();
-            Log.i(toString(), String.format("onReceive with Action %s finished!", intent.getAction()));
         }
 
         @Override
@@ -106,10 +92,8 @@ public class EventsService extends RemoteViewsService {
             RemoteViews view = null;
 
             if (position < elements.size()) {
-                Log.i(toString(), String.format("getViewAt with position %d ...", position));
                 UpNextListElement currElement = elements.get(position);
                 view = ListViewElementCreator.createListElementView(context, currElement, isTodayView);
-                Log.i(toString(), String.format("getViewAt with position %d finished with element [%s]", position, currElement));
             }
 
             return view;
@@ -162,10 +146,6 @@ public class EventsService extends RemoteViewsService {
         }
 
         private void populateElements() {
-            Log.i(toString(), "populateElements ...");
-
-            List<UpNextCalendar> cals = calendarRepository.getCalendars();
-
             long numberOfDaysBetween = ChronoUnit.DAYS.between(start, end) + 1;
             List<LocalDate> days = IntStream.iterate(0, i -> i + 1)
                     .limit(numberOfDaysBetween)
@@ -174,13 +154,14 @@ public class EventsService extends RemoteViewsService {
 
             elements.clear();
             days.forEach(day -> {
-                List<UpNextEvent> eventsForThatDay = eventRepository.getEventsByDay(cals, day);
+                List<UpNextEvent> eventsForThatDay = eventRepository.getEvents(day);
+
                 if (!isTodayView && !eventsForThatDay.isEmpty()) {
                     elements.add(new UpNextDayLabel(day));
                 }
+
                 elements.addAll(eventsForThatDay);
             });
-            Log.i(toString(), String.format("populateElements with %d elements finished!", elements.size()));
         }
     }
 }

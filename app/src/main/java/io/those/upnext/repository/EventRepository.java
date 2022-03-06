@@ -1,14 +1,14 @@
 package io.those.upnext.repository;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.text.format.Time;
 import android.util.Log;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,74 +17,75 @@ import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.util.TimeUtil;
 
-public class EventRepository extends Repository<UpNextEvent> {
+public class EventRepository {
+    private final ContentResolver contentResolver;
 
     public EventRepository(ContentResolver contentResolver) {
-        super(contentResolver);
+        this.contentResolver = contentResolver;
     }
 
-    @Override
-    protected String[] getProjection() {
+    private String[] getProjection() {
         return new String[]{
-                /* 0 */ CalendarContract.Events._ID,           // String
-                /* 1 */ CalendarContract.Events.TITLE,         // String
-                /* 2 */ CalendarContract.Events.DESCRIPTION,   // String
-                /* 3 */ CalendarContract.Events.ALL_DAY,       // Integer (boolean)
-                /* 4 */ CalendarContract.Events.DTSTART,       // Long
-                /* 5 */ CalendarContract.Events.DTEND,         // Long
-                /* 5 */ CalendarContract.Events.EVENT_TIMEZONE // String
+                /* 0 */ CalendarContract.Instances.EVENT_ID,             // String
+                /* 1 */ CalendarContract.Instances.TITLE,                // String
+                /* 2 */ CalendarContract.Instances.DESCRIPTION,          // String
+                /* 3 */ CalendarContract.Instances.ALL_DAY,              // Int (boolean)
+                /* 4 */ CalendarContract.Instances.BEGIN,                // Long
+                /* 5 */ CalendarContract.Instances.END,                  // Long
+                /* 6 */ CalendarContract.Instances.EVENT_TIMEZONE,       // String
+                /* 7 */ CalendarContract.Instances.CALENDAR_ID,          // Long
+                /* 8 */ CalendarContract.Instances.CALENDAR_DISPLAY_NAME,// String
+                /* 9 */ CalendarContract.Instances.CALENDAR_COLOR        // Int
         };
     }
 
-    @Override
-    protected String getSelection() {
-        return "(" +
-                     "(" + CalendarContract.Events.CALENDAR_ID + " = ?)" +
-                " AND (" + CalendarContract.Events.DTSTART     + " < ?)" + // must be less than END of range
-                " AND (" + CalendarContract.Events.DTEND       + " > ?)" + // must be greater than START of range
-               ")";
-    }
-
-    @Override
-    protected Uri getProviderUri() {
-        return CalendarContract.Events.CONTENT_URI;
-    }
-
-    @Override
-    protected UpNextEvent toItem(Cursor cur) {
+    private UpNextEvent toEvent(Cursor cur) {
         return UpNextEvent.of(
                 cur.getString(0),
                 cur.getString(1),
                 cur.getString(2),
-                cur.getInt(3) == 1 ? Boolean.TRUE : Boolean.FALSE,
+                cur.getInt(3) == 1,
                 cur.getLong(4),
                 cur.getLong(5),
-                cur.getString(6)
+                cur.getString(6),
+                UpNextCalendar.of(cur.getLong(7), cur.getString(8), cur.getInt(9))
         );
     }
 
-    public List<UpNextEvent> getEvents(UpNextCalendar calendar, LocalDate day) {
-        Log.i(EventRepository.class.getSimpleName(), String.format("getEvents for calendar %s on day %s ...", calendar, day.format(DateTimeFormatter.BASIC_ISO_DATE)));
+    public List<UpNextEvent> getEvents(LocalDate day) {
+        if (day == null) {
+            return Collections.emptyList();
+        }
 
-        List<UpNextEvent> events = getItems(new String[]{
-                calendar.getId().toString(),
-                String.valueOf((TimeUtil.toMillis(day.atTime(LocalTime.MAX), TimeUtil.UTC))), // start <= END of range
-                String.valueOf(TimeUtil.toMillis(day.atTime(LocalTime.MIN), TimeUtil.UTC))    // end >= START of range
-        });
+        Log.i(getClass().getSimpleName(), String.format("getEvents for day %s ...", day.toString()));
+        List<UpNextEvent> events = new ArrayList<>();
 
-        events.forEach(event -> {
-            event.setCalendar(calendar);
-            event.setDay(day);
-        });
+        long start = Time.getJulianDay(TimeUtil.toMillis(day, TimeUtil.UTC), 0);
+        long end = Time.getJulianDay(TimeUtil.toMillis(day, TimeUtil.UTC), 0);
 
-        Log.i(EventRepository.class.getSimpleName(), String.format("getEvents for calendar %s on day %s finished with %d events!", calendar, day.format(DateTimeFormatter.BASIC_ISO_DATE), events.size()));
+        Uri.Builder instancesUriBuilder = CalendarContract.Instances.CONTENT_BY_DAY_URI.buildUpon();
+        ContentUris.appendId(instancesUriBuilder, start);
+        ContentUris.appendId(instancesUriBuilder, end);
+        Uri instancesUri = instancesUriBuilder.build();
+
+        Cursor cur = contentResolver.query(
+                instancesUri,
+                getProjection(),
+                null,
+                null,
+                null
+        );
+
+        while (cur.moveToNext()) {
+            events.add(toEvent(cur));
+        }
+
+        cur.close();
+        Collections.sort(events);
+
+        events.forEach(event -> Log.i(getClass().getSimpleName(), String.format("getEvents for day %s found event: %s", day, event.toString())));
+
+        Log.i(getClass().getSimpleName(), String.format("getEvents for day %s finished with %d events!", day, events.size()));
         return events;
-    }
-
-    public List<UpNextEvent> getEventsByDay(List<UpNextCalendar> cals, LocalDate day) {
-        List<UpNextEvent> rangeEvents = new ArrayList<>();
-        cals.forEach(cal -> rangeEvents.addAll(getEvents(cal, day)));
-        Collections.sort(rangeEvents);
-        return rangeEvents;
     }
 }

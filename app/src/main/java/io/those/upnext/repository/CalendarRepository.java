@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract.Calendars;
-import android.util.Log;
 
 import java.util.List;
 
@@ -34,6 +33,11 @@ public class CalendarRepository extends Repository<UpNextCalendar> {
     }
 
     @Override
+    protected String getSortOrder() {
+        return null;
+    }
+
+    @Override
     protected Uri getProviderUri() {
         return Calendars.CONTENT_URI;
     }
@@ -51,9 +55,6 @@ public class CalendarRepository extends Repository<UpNextCalendar> {
     }
 
     public List<UpNextCalendar> getCalendars() {
-        Log.i(CalendarRepository.class.getSimpleName(), "getCalendars ...");
-        List<UpNextCalendar> calendars = getItems(null);
-        Log.i(CalendarRepository.class.getSimpleName(), String.format("getCalendars finished with %d calendars!", calendars.size()));
-        return calendars;
+        return getItems(null);
     }
 }

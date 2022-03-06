@@ -6,10 +6,11 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Repository<T extends Comparable> {
+public abstract class Repository<T extends Comparable<T>> {
 
     private final ContentResolver contentResolver;
 
@@ -17,13 +18,14 @@ public abstract class Repository<T extends Comparable> {
     protected abstract String getSelection();
     protected abstract Uri getProviderUri();
     protected abstract T toItem(Cursor cur);
+    protected abstract String getSortOrder();
 
     protected Repository(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
     }
 
     protected List<T> getItems(String[] selectionArgs) {
-        Log.i(Repository.class.getSimpleName(), String.format("getItems with %d selection arguments...", selectionArgs != null ? selectionArgs.length : 0));
+        Log.i(getClass().getSimpleName(), String.format("getItems with arguments %s ...", selectionArgs != null ? Arrays.toString(selectionArgs) : ""));
         List<T> items = new ArrayList<>();
 
         Cursor cur = getContentResolver().query(
@@ -31,7 +33,7 @@ public abstract class Repository<T extends Comparable> {
                 getProjection(),
                 getSelection(),
                 selectionArgs,
-                null
+                getSortOrder()
         );
 
         while (cur.moveToNext()) {
@@ -41,7 +43,9 @@ public abstract class Repository<T extends Comparable> {
         cur.close();
         Collections.sort(items);
 
-        Log.i(Repository.class.getSimpleName(), String.format("getItems finished with %d elements!", items.size()));
+        items.forEach(item -> Log.i(getClass().getSimpleName(), String.format("getItems found item: %s", item.toString())));
+
+        Log.i(getClass().getSimpleName(), String.format("getItems finished with %d elements!", items.size()));
         return items;
     }
 
