@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- https://coolors.co/palette/e4572e-2887c8-0067a5-003153-010b13 -->
-    <color name="background_widget">#FFFFFF</color>
+    <color name="background_widget">#F2FFFFFF</color>
 
     <color name="background_header">#0067A5</color>
-    <color name="font_header"      >#E9ECEF</color>
+    <color name="font_header"      >#FFFFFF</color>
 
-    <color name="background_event" >#E9ECEF</color>
-    <color name="font_date"        >#343A40</color>
-    <color name="font_event"       >#343A40</color>
+    <color name="background_event" >#d9e1e5</color>
+    <color name="font_date"        >#000000</color>
+    <color name="font_event"       >#000000</color>
 
     <color name="font_accent"      >#E4572E</color>
 </resources>
