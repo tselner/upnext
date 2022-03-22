@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- https://coolors.co/palette/e4572e-2887c8-0067a5-003153-010b13 -->
-    <color name="background_widget">#F2FFFFFF</color>
+    <color name="background_widget">#FFFFFF</color>
 
     <color name="background_header">#0067A5</color>
     <color name="font_header"      >#FFFFFF</color>

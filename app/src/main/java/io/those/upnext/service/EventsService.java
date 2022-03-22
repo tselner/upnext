@@ -128,11 +128,11 @@ public class EventsService extends RemoteViewsService {
         }
 
         private boolean allDayEventsPresent(List<UpNextListElement> elements) {
-            return elements.stream().anyMatch(element -> element instanceof UpNextEvent && ((UpNextEvent) element).isAllDay());
+            return elements.stream().anyMatch(element -> element instanceof UpNextEvent && ((UpNextEvent) element).allDay);
         }
 
         private boolean subDayEventsPresent(List<UpNextListElement> elements) {
-            return elements.stream().anyMatch(element -> element instanceof UpNextEvent && !((UpNextEvent) element).isAllDay());
+            return elements.stream().anyMatch(element -> element instanceof UpNextEvent && !((UpNextEvent) element).allDay);
         }
 
         @Override
@@ -154,7 +154,7 @@ public class EventsService extends RemoteViewsService {
 
             elements.clear();
             days.forEach(day -> {
-                List<UpNextEvent> eventsForThatDay = eventRepository.getEvents(day);
+                List<UpNextEvent> eventsForThatDay = eventRepository.loadEvents(day);
 
                 if (!isTodayView && !eventsForThatDay.isEmpty()) {
                     elements.add(new UpNextDayLabel(day));

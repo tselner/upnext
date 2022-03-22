@@ -39,13 +39,13 @@ public class ListViewElementCreator {
         RemoteViews eventView;
 
         if (isTodayEvent) {
-            if (event.isAllDay()) {
+            if (event.allDay) {
                 eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_today_allday);
             } else {
                 eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_today_subday);
             }
         } else {
-            if (event.isAllDay()) {
+            if (event.allDay) {
                 eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_upnext_allday);
             } else {
                 eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_upnext_subday);
@@ -56,16 +56,16 @@ public class ListViewElementCreator {
         setEventBackgroundColor(context, eventView, event);
 
         // Color
-        eventView.setInt(R.id.event_color, "setColorFilter", event.getColor());
+        eventView.setInt(R.id.event_color, "setColorFilter", event.color);
 
         // Title
-        eventView.setTextViewText(R.id.event_title, event.getTitle());
-        if (isNightMode(context) && event.isAllDay()) {
-            eventView.setTextColor(R.id.event_title, event.getColor());
+        eventView.setTextViewText(R.id.event_title, event.title);
+        if (isNightMode(context) && event.allDay) {
+            eventView.setTextColor(R.id.event_title, event.color);
         }
 
         // Duration
-        if (event.isAllDay()) {
+        if (event.allDay) {
             eventView.setViewVisibility(R.id.event_duration, GONE);
         } else {
             eventView.setTextViewText(R.id.event_duration, isTodayEvent ? event.getDuration() : event.getStartAsString());
@@ -76,8 +76,8 @@ public class ListViewElementCreator {
 
     private static void setEventBackgroundColor(Context context, RemoteViews eventView, UpNextEvent event) {
         // Background & Alpha
-        if (isDayMode(context) && event.isAllDay()) {
-            eventView.setInt(R.id.event_background, "setColorFilter", event.getColor());
+        if (isDayMode(context) && event.allDay) {
+            eventView.setInt(R.id.event_background, "setColorFilter", event.color);
             eventView.setInt(R.id.event_background, "setImageAlpha", UpNextCalendar.BACKGROUND_ALPHA);
         } else {
             eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));

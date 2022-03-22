@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background_widget">#CC000000</color>
+
+    <color name="background_widget">#000000</color>
 
     <color name="background_header">#2887C8</color>
     <color name="font_header"      >#000000</color>

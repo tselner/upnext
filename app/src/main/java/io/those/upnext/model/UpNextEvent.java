@@ -2,8 +2,6 @@ package io.those.upnext.model;
 
 import static io.those.upnext.util.TimeUtil.toDateTime;
 
-import androidx.annotation.NonNull;
-
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import java.time.LocalDateTime;
@@ -14,69 +12,51 @@ public class UpNextEvent extends UpNextListElement implements Comparable<UpNextE
     private final DateTimeFormatter formatter_time = DateTimeFormatter.ofPattern("HH:mm");
     private final DateTimeFormatter formatter_datetime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private final String id;
-    private final String title;
-    private final String description;
-    private final boolean allDay;
-    private final Long startInMillis;
-    private final Long endInMillis;
-    private final String timezone;
-    private final UpNextCalendar calendar;
+    public long id;
+    public long instance_id;
+    public int color;
+    public String timezone;
+    public CharSequence title;
+    public CharSequence location;
+    public boolean allDay;
+    public String organizer;
+    public boolean guestsCanModify;
 
-    public LocalDateTime getStart() {
-        return millisToLocalDateTime(getStartInMillis());
-    }
+    public int startDay;       // start Julian day
+    public int endDay;         // end Julian day
+    public int startTime;      // Start and end time are in minutes since midnight
+    public int endTime;
 
-    public LocalDateTime getEnd() {
-        return millisToLocalDateTime(getEndInMillis());
-    }
+    public long startMillis;   // UTC milliseconds since the epoch
+    public long endMillis;     // UTC milliseconds since the epoch
 
-    private LocalDateTime millisToLocalDateTime(Long millis) {
-        return millis != null ? toDateTime(millis, ZoneId.systemDefault()) : null;
-    }
+    public boolean hasAlarm;
+    public boolean isRepeating;
 
-    public static UpNextEvent of(String id, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone, UpNextCalendar calendar) {
-        return new UpNextEvent(id, title, description, allDay, startInMillis, endInMillis, timezone, calendar);
-    }
-
-    private UpNextEvent(String id, String title, String description, Boolean allDay, Long startInMillis, Long endInMillis, String timezone, UpNextCalendar calendar) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.allDay = allDay;
-        this.startInMillis = startInMillis;
-        this.endInMillis = endInMillis;
-        this.timezone = timezone;
-        this.calendar = calendar;
-    }
+    public int selfAttendeeStatus;
 
     @Override
     public boolean equals(Object otherEventObject) {
         if (otherEventObject instanceof UpNextEvent) {
             UpNextEvent otherEvent = (UpNextEvent) otherEventObject;
-            return (getId().equals(otherEvent.getId()) && getCalendar().equals(otherEvent.getCalendar()));
+            return (id==otherEvent.id);
         } else {
             return false;
         }
     }
 
-    @NonNull
     @Override
-    public String toString() {
-        return String.format("[allDay=%s, start=%s, end=%s] %s", Boolean.TRUE.equals(isAllDay()) ? "YES" : "NO ", getStartWithDateAsString(), getEndWithDateAsString(), getTitle());
+    public int compareTo(UpNextEvent e) {
+        return CompareToBuilder.reflectionCompare(this, e);
+    }
+
+    public String getDuration() {
+        return String.format("%s - %s", getStartAsString(), getEndAsString());
     }
 
     public String getStartAsString() {
         if (getStart() != null) {
             return getStart().format(formatter_time);
-        } else {
-            return "";
-        }
-    }
-
-    public String getStartWithDateAsString() {
-        if (getStart() != null) {
-            return getStart().format(formatter_datetime);
         } else {
             return "";
         }
@@ -90,66 +70,15 @@ public class UpNextEvent extends UpNextListElement implements Comparable<UpNextE
         }
     }
 
-    public String getEndWithDateAsString() {
-        if (getEnd() != null) {
-            return getEnd().format(formatter_datetime);
-        } else {
-            return "";
-        }
+    public LocalDateTime getStart() {
+        return millisToLocalDateTime(startMillis);
     }
 
-    public String getDuration() {
-        return String.format("%s - %s", getStartAsString(), getEndAsString());
+    public LocalDateTime getEnd() {
+        return millisToLocalDateTime(endMillis);
     }
 
-    @Override
-    public int compareTo(UpNextEvent e) {
-        return new CompareToBuilder()
-                .append(this.isSubDay(), e.isSubDay())
-                .append(this.getCalendar(), e.getCalendar())
-                .append(this.getStartInMillis(), e.getStartInMillis())
-                .append(this.getEndInMillis(), e.getEndInMillis())
-                .append(this.getTitle(), e.getTitle())
-                .toComparison();
-    }
-
-    public int getColor() {
-        return getCalendar().getColor();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public UpNextCalendar getCalendar() {
-        return calendar;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Long getStartInMillis() {
-        return startInMillis;
-    }
-
-    public Long getEndInMillis() {
-        return endInMillis;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public boolean isAllDay() {
-        return allDay;
-    }
-
-    public boolean isSubDay() {
-        return !isAllDay();
+    private LocalDateTime millisToLocalDateTime(Long millis) {
+        return millis != null ? toDateTime(millis, ZoneId.systemDefault()) : null;
     }
 }

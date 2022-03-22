@@ -31,7 +31,7 @@ public class UpNextWidgetProvider extends AppWidgetProvider {
     private void performUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             LocalDate today = LocalDate.now();
-            // LocalDate today = LocalDate.of(2021, Month.OCTOBER, 21);
+            // LocalDate today = LocalDate.of(2022, Month.MARCH, 12);
 
             Intent todayUpdateIntent   = IntentUtil.createServiceIntent(context,            appWidgetId, today            , today            , true);
             Intent upnextUpdateIntent  = IntentUtil.createServiceIntent(context,            appWidgetId, today.plusDays(1), today.plusDays(2), false);
