@@ -1,8 +1,6 @@
 package io.those.upnext.remoteviews;
 
 import static android.view.View.GONE;
-import static io.those.upnext.util.DayNightUtil.isDayMode;
-import static io.those.upnext.util.DayNightUtil.isNightMode;
 
 import android.content.Context;
 import android.widget.RemoteViews;
@@ -55,14 +53,19 @@ public class ListViewElementCreator {
         // Background
         setEventBackgroundColor(context, eventView, event);
 
-        // Color
-        eventView.setInt(R.id.event_color, "setColorFilter", event.color);
+        // Color (element is only displayed on subDay events)
+        if (!event.allDay) {
+            eventView.setInt(R.id.event_color, "setColorFilter", event.color);
+        }
 
         // Title
         eventView.setTextViewText(R.id.event_title, event.title);
+
+        /*
         if (isNightMode(context) && event.allDay) {
             eventView.setTextColor(R.id.event_title, event.color);
         }
+         */
 
         // Duration
         if (event.allDay) {
@@ -76,12 +79,20 @@ public class ListViewElementCreator {
 
     private static void setEventBackgroundColor(Context context, RemoteViews eventView, UpNextEvent event) {
         // Background & Alpha
+        if (event.allDay) {
+            eventView.setInt(R.id.event_background, "setColorFilter", event.color);
+            eventView.setInt(R.id.event_background, "setImageAlpha", UpNextCalendar.BACKGROUND_ALPHA);
+        } else {
+            eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
+        }
+        /*
         if (isDayMode(context) && event.allDay) {
             eventView.setInt(R.id.event_background, "setColorFilter", event.color);
             eventView.setInt(R.id.event_background, "setImageAlpha", UpNextCalendar.BACKGROUND_ALPHA);
         } else {
             eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
         }
+         */
     }
 /*
     private static int getTextColor(Context context, int elementColor) {

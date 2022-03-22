@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="background_widget">#000000</color>
+    <color name="background_widget">#202125</color>
 
     <color name="background_header">#2887C8</color>
-    <color name="font_header"      >#000000</color>
+    <color name="font_header"      >#202125</color>
 
-    <color name="background_event" >#263138</color>
-    <color name="font_date"        >#FFFFFF</color>
-    <color name="font_event"       >#FFFFFF</color>
+    <color name="background_event" >#3A3F42</color>
+    <color name="font_date"        >#F9F9F9</color>
+    <color name="font_event"       >#F9F9F9</color>
 
     <color name="font_accent"      >#E4572E</color>
 </resources>

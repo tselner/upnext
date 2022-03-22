@@ -25,7 +25,6 @@
                         <TextView
                             android:id="@+id/event_title"
                             style="@style/eventTitle"
-                            android:textFontWeight="400"
                             android:layout_width="0dp"
                             android:layout_weight="7"
                             android:layout_height="match_parent"

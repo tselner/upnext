@@ -12,19 +12,14 @@
                     android:id="@+id/event_background"
                     style="@style/eventBackground" />
 
-                <ImageView
-                    android:id="@+id/event_color"
-                    style="@style/eventColor" />
-
                 <LinearLayout
                     android:id="@+id/event_text"
-                    style="@style/eventTextLayout">
+                    style="@style/eventTextLayoutAllDay">
 
                         <!-- title -->
                         <TextView
                             android:id="@+id/event_title"
-                            style="@style/eventTitle"
-                            android:textFontWeight="400"
+                            style="@style/eventTitleAllDay"
                             android:maxLines="1"
                             android:ellipsize="end"/>
                 </LinearLayout>
