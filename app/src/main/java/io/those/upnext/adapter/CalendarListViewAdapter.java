@@ -1,7 +1,5 @@
 package io.those.upnext.adapter;
 
-import static io.those.upnext.util.DayNightUtil.isDayMode;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,16 +56,8 @@ public class CalendarListViewAdapter extends BaseAdapter {
 
         // background
         ImageView backgroundView = convertView.findViewById(R.id.calendar_background);
-        if (isDayMode(context)) {
-            backgroundView.setColorFilter(cal.getColor());
-            backgroundView.setImageAlpha(UpNextCalendar.BACKGROUND_ALPHA);
-        } else {
-            backgroundView.setColorFilter(ContextCompat.getColor(context, R.color.background_event));
-        }
-
-        // color
-        ImageView colorView = convertView.findViewById(R.id.calendar_color);
-        colorView.setColorFilter(cal.getColor());
+        backgroundView.setColorFilter(cal.getColor());
+        backgroundView.setImageAlpha(UpNextCalendar.BACKGROUND_ALPHA);
 
         // name
         ((TextView) convertView.findViewById(R.id.calendar_title)).setText(cal.getDisplayName());

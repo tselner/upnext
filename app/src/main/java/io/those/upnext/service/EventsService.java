@@ -22,7 +22,7 @@ import io.those.upnext.model.UpNextDayLabel;
 import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.model.UpNextListElement;
 import io.those.upnext.remoteviews.ListViewElementCreator;
-import io.those.upnext.repository.EventRepository;
+import io.those.upnext.repository.InstanceRepository;
 
 public class EventsService extends RemoteViewsService {
     public static final String EXTRA_START = "start";
@@ -41,7 +41,7 @@ public class EventsService extends RemoteViewsService {
         private final LocalDate end;
         private final boolean isTodayView;
         private final List<UpNextListElement> elements = new ArrayList<>();
-        private final EventRepository eventRepository;
+        private final InstanceRepository instanceRepository;
         
         @NonNull
         @Override
@@ -55,7 +55,7 @@ public class EventsService extends RemoteViewsService {
         public EventsRemoteViewsFactory(Context context, Intent intent) {
             this.context = context;
 
-            this.eventRepository = new EventRepository(context.getContentResolver());
+            this.instanceRepository = new InstanceRepository(context.getContentResolver());
 
             this.start = LocalDate.parse(intent.getStringExtra(EXTRA_START), DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
             this.end   = LocalDate.parse(intent.getStringExtra(EXTRA_END)  , DateTimeFormatter.ofPattern(EXTRA_DATE_PATTERN));
@@ -153,8 +153,9 @@ public class EventsService extends RemoteViewsService {
                     .collect(Collectors.toList());
 
             elements.clear();
+
             days.forEach(day -> {
-                List<UpNextEvent> eventsForThatDay = eventRepository.loadEvents(day);
+                List<UpNextEvent> eventsForThatDay = instanceRepository.getInstances(day);
 
                 if (!isTodayView && !eventsForThatDay.isEmpty()) {
                     elements.add(new UpNextDayLabel(day));
