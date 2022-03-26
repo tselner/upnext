@@ -6,9 +6,9 @@ import android.content.Context;
 import android.widget.RemoteViews;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 
 import io.those.upnext.R;
-import io.those.upnext.model.UpNextCalendar;
 import io.those.upnext.model.UpNextDayLabel;
 import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.model.UpNextListElement;
@@ -36,6 +36,9 @@ public class ListViewElementCreator {
     private static RemoteViews createEventView(Context context, UpNextEvent event, boolean isTodayEvent) {
         RemoteViews eventView;
 
+        int backgroundColor = getEventBackgroundColor(context, event);
+        int textColor = getTextColor(context, backgroundColor);
+
         if (isTodayEvent) {
             if (event.allDay) {
                 eventView = new RemoteViews(context.getPackageName(), R.layout.layout_event_today_allday);
@@ -51,7 +54,8 @@ public class ListViewElementCreator {
         }
 
         // Background
-        setEventBackgroundColor(context, eventView, event);
+        eventView.setInt(R.id.event_background, "setColorFilter", backgroundColor);
+        // eventView.setInt(R.id.event_background, "setImageAlpha", UpNextCalendar.BACKGROUND_ALPHA);
 
         // Color (element is only displayed on subDay events)
         if (!event.allDay) {
@@ -60,53 +64,39 @@ public class ListViewElementCreator {
 
         // Title
         eventView.setTextViewText(R.id.event_title, event.title);
-
-        /*
-        if (isNightMode(context) && event.allDay) {
-            eventView.setTextColor(R.id.event_title, event.color);
-        }
-         */
+        eventView.setTextColor(R.id.event_title, textColor);
 
         // Duration
         if (event.allDay) {
             eventView.setViewVisibility(R.id.event_duration, GONE);
         } else {
             eventView.setTextViewText(R.id.event_duration, isTodayEvent ? event.getDuration() : event.getStartAsString());
+            eventView.setTextColor(R.id.event_duration, textColor);
         }
 
         return eventView;
     }
 
-    private static void setEventBackgroundColor(Context context, RemoteViews eventView, UpNextEvent event) {
+    private static int getEventBackgroundColor(Context context, UpNextEvent event) {
         // Background & Alpha
         if (event.allDay) {
-            eventView.setInt(R.id.event_background, "setColorFilter", event.color);
-            eventView.setInt(R.id.event_background, "setImageAlpha", UpNextCalendar.BACKGROUND_ALPHA);
+            return event.color;
         } else {
-            eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
+            return ContextCompat.getColor(context, R.color.background_event);
         }
-        /*
-        if (isDayMode(context) && event.allDay) {
-            eventView.setInt(R.id.event_background, "setColorFilter", event.color);
-            eventView.setInt(R.id.event_background, "setImageAlpha", UpNextCalendar.BACKGROUND_ALPHA);
-        } else {
-            eventView.setInt(R.id.event_background, "setColorFilter", ContextCompat.getColor(context, R.color.background_event));
-        }
-         */
     }
-/*
-    private static int getTextColor(Context context, int elementColor) {
+
+    private static int getTextColor(Context context, int backgroundColor) {
         // Text color
         int colorFont      = ContextCompat.getColor(context, R.color.font_event);
         int colorFontALt   = ContextCompat.getColor(context, R.color.font_event_alt);
         int chosenFontColor = colorFont;
 
-        if (ColorUtils.calculateContrast(colorFont, elementColor) < 4.5) {
+        if (ColorUtils.calculateContrast(colorFont, backgroundColor) < 4.5) {
             // need different font (https://miromatech.com/android/contrast-ratio/)
             chosenFontColor = colorFontALt;
         }
 
         return chosenFontColor;
     }
- */
 }

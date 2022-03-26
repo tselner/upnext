@@ -62,7 +62,6 @@
     <style name="eventTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/font_event</item>
         <item name="android:textFontWeight">500</item>
         <item name="android:textSize">11sp</item>
     </style>
@@ -78,7 +77,6 @@
     <style name="eventDuration">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/font_event</item>
         <item name="android:textSize">10sp</item>
     </style>
 

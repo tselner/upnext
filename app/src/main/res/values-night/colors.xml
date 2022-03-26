@@ -8,7 +8,8 @@
 
     <color name="background_event" >#3A3F42</color>
     <color name="font_date"        >#F9F9F9</color>
-    <color name="font_event"       >#F9F9F9</color>
+    <color name="font_event"       >#202125</color>
+    <color name="font_event_alt"   >#F9F9F9</color>
 
     <color name="font_accent"      >#E4572E</color>
 </resources>
