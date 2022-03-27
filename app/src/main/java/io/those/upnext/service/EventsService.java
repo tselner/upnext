@@ -23,6 +23,7 @@ import io.those.upnext.model.UpNextEvent;
 import io.those.upnext.model.UpNextListElement;
 import io.those.upnext.remoteviews.ListViewElementCreator;
 import io.those.upnext.repository.InstanceRepository;
+import io.those.upnext.util.PermissionUtil;
 
 public class EventsService extends RemoteViewsService {
     public static final String EXTRA_START = "start";
@@ -146,23 +147,25 @@ public class EventsService extends RemoteViewsService {
         }
 
         private void populateElements() {
-            long numberOfDaysBetween = ChronoUnit.DAYS.between(start, end) + 1;
-            List<LocalDate> days = IntStream.iterate(0, i -> i + 1)
-                    .limit(numberOfDaysBetween)
-                    .mapToObj(start::plusDays)
-                    .collect(Collectors.toList());
+            if (PermissionUtil.checkReadCalendarPermission(context)) {
+                long numberOfDaysBetween = ChronoUnit.DAYS.between(start, end) + 1;
+                List<LocalDate> days = IntStream.iterate(0, i -> i + 1)
+                        .limit(numberOfDaysBetween)
+                        .mapToObj(start::plusDays)
+                        .collect(Collectors.toList());
 
-            elements.clear();
+                elements.clear();
 
-            days.forEach(day -> {
-                List<UpNextEvent> eventsForThatDay = instanceRepository.getInstances(day);
+                days.forEach(day -> {
+                    List<UpNextEvent> eventsForThatDay = instanceRepository.getInstances(day);
 
-                if (!isTodayView && !eventsForThatDay.isEmpty()) {
-                    elements.add(new UpNextDayLabel(day));
-                }
+                    if (!isTodayView && !eventsForThatDay.isEmpty()) {
+                        elements.add(new UpNextDayLabel(day));
+                    }
 
-                elements.addAll(eventsForThatDay);
-            });
+                    elements.addAll(eventsForThatDay);
+                });
+            }
         }
     }
 }

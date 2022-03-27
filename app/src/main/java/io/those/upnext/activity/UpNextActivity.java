@@ -13,6 +13,7 @@ import io.those.upnext.R;
 import io.those.upnext.adapter.CalendarListViewAdapter;
 import io.those.upnext.repository.CalendarRepository;
 import io.those.upnext.util.PermissionUtil;
+import io.those.upnext.util.WidgetUtil;
 
 public class UpNextActivity extends Activity {
 
@@ -28,10 +29,11 @@ public class UpNextActivity extends Activity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (PermissionUtil.isReadCalendarGranted(requestCode, grantResults)) {
-            Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
             refreshUI();
+            WidgetUtil.updateAllWidgets(this);
+            Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "This app requires permission to read your calendar!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "This app requires permission to read your calendar.", Toast.LENGTH_LONG).show();
         }
     }
 
