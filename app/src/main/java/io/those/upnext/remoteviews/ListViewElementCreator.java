@@ -1,12 +1,12 @@
 package io.those.upnext.remoteviews;
 
 import static android.view.View.GONE;
+import static io.those.upnext.util.ColorUtil.getTextColor;
 
 import android.content.Context;
 import android.widget.RemoteViews;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.ColorUtils;
 
 import io.those.upnext.R;
 import io.those.upnext.model.UpNextDayLabel;
@@ -84,19 +84,5 @@ public class ListViewElementCreator {
         } else {
             return ContextCompat.getColor(context, R.color.background_event);
         }
-    }
-
-    private static int getTextColor(Context context, int backgroundColor) {
-        // Text color
-        int colorFont      = ContextCompat.getColor(context, R.color.font_event);
-        int colorFontALt   = ContextCompat.getColor(context, R.color.font_event_alt);
-        int chosenFontColor = colorFont;
-
-        if (ColorUtils.calculateContrast(colorFont, backgroundColor) < 4.5) {
-            // need different font (https://miromatech.com/android/contrast-ratio/)
-            chosenFontColor = colorFontALt;
-        }
-
-        return chosenFontColor;
     }
 }

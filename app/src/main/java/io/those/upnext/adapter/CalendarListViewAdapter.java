@@ -1,5 +1,7 @@
 package io.those.upnext.adapter;
 
+import static io.those.upnext.util.ColorUtil.getTextColor;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,10 +59,11 @@ public class CalendarListViewAdapter extends BaseAdapter {
         // background
         ImageView backgroundView = convertView.findViewById(R.id.calendar_background);
         backgroundView.setColorFilter(cal.getColor());
-        backgroundView.setImageAlpha(UpNextCalendar.BACKGROUND_ALPHA);
 
         // name
-        ((TextView) convertView.findViewById(R.id.calendar_title)).setText(cal.getDisplayName());
+        TextView calendarTitle = ((TextView) convertView.findViewById(R.id.calendar_title));
+        calendarTitle.setTextColor(getTextColor(context, cal.getColor()));
+        calendarTitle.setText(cal.getDisplayName());
 
         return convertView;
     }

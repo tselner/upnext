@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background_widget"
     android:padding="16dp"
     tools:context=".activity.UpNextActivity">
 
@@ -24,7 +23,7 @@
         android:text="No calendars available."
         android:textSize="18sp"
         android:textColor="@color/font_accent"/>
-
+<!--
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -46,4 +45,5 @@
             android:text="About" />
 
     </LinearLayout>
+  -->
 </RelativeLayout>

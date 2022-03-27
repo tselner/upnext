@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/calendar_layout"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
@@ -11,19 +10,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/calendar_background"
-            style="@style/calendarBackground" />
+    <ImageView
+        android:id="@+id/calendar_background"
+        style="@style/calendarBackground" />
 
-        <LinearLayout
-            android:id="@+id/calendar_text"
-            style="@style/calendarTextLayout">
-
-            <!-- title -->
-            <TextView
-                android:id="@+id/calendar_title"
-                style="@style/calendarTitle"/>
-        </LinearLayout>
-
+    <TextView
+        android:id="@+id/calendar_title"
+        style="@style/calendarTitle" />
     </FrameLayout>
 </LinearLayout>

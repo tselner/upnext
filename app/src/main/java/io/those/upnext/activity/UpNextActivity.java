@@ -4,7 +4,6 @@ import static android.Manifest.permission.READ_CALENDAR;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,11 +33,6 @@ public class UpNextActivity extends Activity {
         } else {
             Toast.makeText(this, "This app requires permission to read your calendar!", Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void onClickRefresh(View view) {
-        checkPermission();
-        refreshUI();
     }
 
     private void refreshUI() {
